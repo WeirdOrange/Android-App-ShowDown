@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">showdown</string>
+    <string name="login_bg">LOGIN</string>
+    <string name="signup_bg">SIGNUP</string>
+
+    <string name="username_tag">Username</string>
+    <string name="password_tag">Password</string>
+</resources>
