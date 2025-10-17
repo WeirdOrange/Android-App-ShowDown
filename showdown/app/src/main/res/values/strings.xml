@@ -1,8 +1,28 @@
 <resources>
-    <string name="app_name">showdown</string>
+    <string name="app_name">SHOWDOWN</string>
     <string name="login_bg">LOGIN</string>
     <string name="signup_bg">SIGNUP</string>
 
-    <string name="username_tag">Username</string>
-    <string name="password_tag">Password</string>
+    <string name="email_tag">Email:</string>
+    <string name="email_hint">Enter Email</string>
+    <string name="password_tag">Password:</string>
+    <string name="password_hint">Enter Password</string>
+    <string name="login_btn">Login</string>
+    <string name="new_tag">New to Here? </string>
+    <string name="ask_signup_tag"> Sign Up Now</string>
+
+    <string name="username_tag">Email:</string>
+    <string name="username_hint">Enter Email</string>
+    <string name="cfm_password_tag">Confirm Password:</string>
+    <string name="cfm_password_hint">Enter Confirm Password</string>
+
+    <string name="register_btn">Register Account</string>
+    <string name="have_acc">Already have an account? </string>
+    <string name="ask_login_tag"> Log In Here</string>
+
+    <string name="signup_hint1">Login</string>
+    <string name="signup_hint2">Login</string>
+    <string name="signup_hint3">Login</string>
+    <string name="signup_hint4">Login</string>
+    <string name="signup_hint5">Login</string>
 </resources>
