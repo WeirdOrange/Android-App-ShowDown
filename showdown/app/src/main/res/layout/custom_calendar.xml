@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_calendar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            >
+            <ImageView
+                android:id="@+id/iv_previous_month"
+                android:layout_width="30dp"
+                android:layout_height="35dp"
+                android:padding="8dp"
+                android:src="@drawable/previous_arrow_resized"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:id="@+id/tv_current_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/select_month"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                />
+
+            <ImageView
+                android:id="@+id/iv_next_month"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:padding="8dp"
+                android:src="@drawable/next_arrow_resized"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <TextView
+                style="@style/CalendarDayOfWeek"
+                android:text="@string/sunday" />
+            <TextView
+                style="@style/CalendarDayOfWeek"
+                android:text="@string/monday" />
+            <TextView
+                style="@style/CalendarDayOfWeek"
+                android:text="@string/tuesday" />
+            <TextView
+                style="@style/CalendarDayOfWeek"
+                android:text="@string/wednesday" />
+            <TextView
+                style="@style/CalendarDayOfWeek"
+                android:text="@string/thursday" />
+            <TextView
+                style="@style/CalendarDayOfWeek"
+                android:text="@string/friday" />
+            <TextView
+                style="@style/CalendarDayOfWeek"
+                android:text="@string/saturday" />
+        </LinearLayout>
+        <GridLayout
+            android:id="@+id/grid_calendar_days"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="7"
+            android:rowCount="6"
+            android:alignmentMode="alignBounds" />
+    </LinearLayout>
+</merge>

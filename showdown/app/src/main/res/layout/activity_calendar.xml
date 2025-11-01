@@ -1,8 +1,96 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    >
 
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:rowCount="1"
+        android:columnCount="4"
+        android:useDefaultMargins="true"
+        android:layout_marginTop="50dp"
+        android:background="@color/white">
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="0.5" />
+        <Button
+            android:id="@+id/calendar_main_bttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+        <Button
+            android:id="@+id/calendar_bttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+        <Button
+            android:id="@+id/calendar_profile_bttn"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:layout_gravity="end"
+            android:layout_columnWeight="1"
+            />
+    </GridLayout>
+    <CalendarView.CalendarView
+        android:id="@+id/calendar_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="-10dp"
+        android:background="@drawable/edittext_border"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="64sp"
+                    android:fontFamily="@font/nats_regular"
+                    android:text="20" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/nats_regular"
+                    android:text=" November 2025" />
+            </LinearLayout>
+            <ImageButton
+                android:id="@+id/eventButton"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:contentDescription="New Event"
+                android:background="@drawable/left_to_right_transparent"
+                android:src="@drawable/greatestshowmanposter"
+                android:scaleType="centerCrop"
+                android:foregroundTint="@color/gray"
+                android:tintMode="multiply"
+                />
 
-</FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -9,9 +9,10 @@
 
     <color name="primary_light">#FAC747</color>
     <color name="secondary_light">#8390FA</color>
-    <color name="tertiary_light">#89BDB7</color>
+    <color name="secondary_light_shade">#C2C8FB</color>
+    <color name="tertiary_light">#9ECFD4</color>
 
     <color name="primary_dark">#DB9D00</color>
-    <color name="secondary_dark">#8390FA</color>
+    <color name="secondary_dark">#2B39AA</color>
     <color name="tertiary_dark">#1B7C71</color>
 </resources>

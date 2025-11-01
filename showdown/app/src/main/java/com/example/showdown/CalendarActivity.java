@@ -1,24 +1,42 @@
 package com.example.showdown;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class CalendarActivity extends AppCompatActivity {
+    private Button main_bttn;
+    private Button profile_bttn;
+    private ImageButton eventButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_calendar);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        ImageButton eventButton = findViewById(R.id.eventButton);
+        eventButton.setClipToOutline(true);
+
+        main_bttn = findViewById(R.id.calendar_main_bttn);
+        main_bttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CalendarActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        profile_bttn = findViewById(R.id.calendar_profile_bttn);
+        profile_bttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CalendarActivity.this, ProfileActivity.class);
+                startActivity(intent);
+            }
         });
     }
 }

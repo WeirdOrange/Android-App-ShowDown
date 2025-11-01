@@ -20,9 +20,18 @@
     <string name="have_acc">Already have an account? </string>
     <string name="ask_login_tag"> Log In Here</string>
 
-    <string name="signup_hint1">Login</string>
-    <string name="signup_hint2">Login</string>
-    <string name="signup_hint3">Login</string>
-    <string name="signup_hint4">Login</string>
-    <string name="signup_hint5">Login</string>
+    <string name="nav_main">Home</string>
+    <string name="nav_calendar">Calendar</string>
+    <string name="nav_profile">Profile</string>
+
+    <string name="select_month">October 2025</string>
+
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tues</string>
+    <string name="wednesday">Wed</string>
+    <string name="thursday">Thurs</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+    <string name="sunday">Sun</string>
+
 </resources>
