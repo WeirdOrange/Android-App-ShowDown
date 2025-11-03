@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-</selector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <bitmap android:src="@drawable/greatestshowmanposter" android:gravity="center" />
+    </item>
+    <item android:top="20dp" android:left="20dp">
+        <bitmap android:src="@drawable/left_to_right_transparent" android:gravity="center" />
+    </item>
+    <!-- Add more items for additional images -->
+</layer-list>

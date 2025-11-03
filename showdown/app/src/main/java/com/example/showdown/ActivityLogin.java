@@ -5,13 +5,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-public class LoginActivity extends AppCompatActivity {
+public class ActivityLogin extends AppCompatActivity {
     private Button login_bttn;
     private Button visit_signup_bttn;
 
@@ -24,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
         login_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(ActivityLogin.this, ActivityMain.class);
                 startActivity(intent);
             }
         });
@@ -33,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         visit_signup_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                Intent intent = new Intent(ActivityLogin.this, ActivitySignup.class);
                 startActivity(intent);
             }
         });

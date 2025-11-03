@@ -78,17 +78,33 @@
                     android:fontFamily="@font/nats_regular"
                     android:text=" November 2025" />
             </LinearLayout>
-            <ImageButton
+            <Button
                 android:id="@+id/eventButton"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
                 android:layout_marginTop="10dp"
-                android:contentDescription="New Event"
                 android:background="@drawable/left_to_right_transparent"
-                android:src="@drawable/greatestshowmanposter"
-                android:scaleType="centerCrop"
-                android:foregroundTint="@color/gray"
-                android:tintMode="multiply"
+                />
+            <Button
+                android:id="@+id/eventButton"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/left_to_right_transparent"
+                />
+            <Button
+                android:id="@+id/eventButton"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/left_to_right_transparent"
+                />
+            <Button
+                android:id="@+id/eventButton"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/left_to_right_transparent"
                 />
 
         </LinearLayout>

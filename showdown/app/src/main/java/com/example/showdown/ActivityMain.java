@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class ActivityMain extends AppCompatActivity {
     private Button calendar_bttn;
     private Button profile_bttn;
 
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         calendar_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CalendarActivity.class);
+                Intent intent = new Intent(ActivityMain.this, ActivityCalendar.class);
                 startActivity(intent);
             }
         });
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         profile_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                Intent intent = new Intent(ActivityMain.this, ActivityProfile.class);
                 startActivity(intent);
             }
         });

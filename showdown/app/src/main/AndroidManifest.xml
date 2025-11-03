@@ -12,19 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Showdown">
         <activity
-            android:name=".ProfileActivity"
+            android:name=".ActivityProfile"
             android:exported="false" />
         <activity
-            android:name=".CalendarActivity"
+            android:name=".ActivityCalendar"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ActivityMain"
             android:exported="false" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".ActivitySignup"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".ActivityLogin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
