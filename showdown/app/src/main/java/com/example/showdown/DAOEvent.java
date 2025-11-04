@@ -9,8 +9,16 @@ import java.util.List;
 @Dao
 public interface DAOEvent {
     @Insert
-    void insert(DBEvent events);
+    long insert(DBEvent events);
 
     @Query("SELECT * FROM events")
     List<DBEvent> getAllBlocking();
+
+    // Get events that are active on a specific date
+    @Query("SELECT * FROM events WHERE :selectedDate >= startDate AND :selectedDate <= endDate ORDER BY startDate ASC")
+    List<DBEvent> getEventsByDate(long selectedDate);
+
+    // Get all upcoming events
+    @Query("SELECT * FROM events WHERE endDate >= :currentDate ORDER BY startDate ASC")
+    List<DBEvent> getUpcomingEvents(long currentDate);
 }

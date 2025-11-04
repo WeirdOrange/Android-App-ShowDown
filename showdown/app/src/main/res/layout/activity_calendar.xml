@@ -1,112 +1,133 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_marginStart="16dp"
-    android:layout_marginEnd="16dp"
-    >
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:rowCount="1"
-        android:columnCount="4"
-        android:useDefaultMargins="true"
-        android:layout_marginTop="50dp"
-        android:background="@color/white">
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_columnWeight="0.5" />
-        <Button
-            android:id="@+id/calendar_main_bttn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            />
-        <Button
-            android:id="@+id/calendar_bttn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            />
-        <Button
-            android:id="@+id/calendar_profile_bttn"
-            android:layout_width="40dp"
-            android:layout_height="45dp"
-            android:layout_gravity="end"
-            android:layout_columnWeight="1"
-            />
-    </GridLayout>
-    <CalendarView.CalendarView
-        android:id="@+id/calendar_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        />
-    <ScrollView
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="-10dp"
-        android:background="@drawable/edittext_border"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         >
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:rowCount="1"
+            android:columnCount="4"
+            android:useDefaultMargins="true"
+            android:layout_marginTop="50dp"
+            android:background="@color/white">
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="0.5" />
+            <Button
+                android:id="@+id/calendar_main_bttn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+            <Button
+                android:id="@+id/calendar_bttn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+            <Button
+                android:id="@+id/calendar_profile_bttn"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:layout_gravity="end"
+                android:layout_columnWeight="1"
+                />
+        </GridLayout>
+        <CalendarView.CalendarView
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_selected_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Select a date to view events"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/edittext_border"
+        android:padding="16dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        app:behavior_peekHeight="100dp"
+        app:behavior_hideable="false">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            >
+            android:orientation="vertical">
+
+            <!-- Drag Handle -->
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/darker_gray" />
+
+            <!-- Events Title -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="5dp"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                >
                 <TextView
+                    android:id="@+id/tv_events_title_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/selected_date"
                     android:textSize="64sp"
-                    android:fontFamily="@font/nats_regular"
-                    android:text="20" />
+                    android:textStyle="bold"
+                    android:layout_marginBottom="12dp" />
                 <TextView
+                    android:id="@+id/tv_events_title_month"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/nats_regular"
-                    android:text=" November 2025" />
+                    android:text="@string/select_month"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="12dp" />
             </LinearLayout>
-            <Button
-                android:id="@+id/eventButton"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/left_to_right_transparent"
-                />
-            <Button
-                android:id="@+id/eventButton"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/left_to_right_transparent"
-                />
-            <Button
-                android:id="@+id/eventButton"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/left_to_right_transparent"
-                />
-            <Button
-                android:id="@+id/eventButton"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/left_to_right_transparent"
-                />
 
+            <!-- RecyclerView for Events -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <!-- Empty State -->
+            <TextView
+                android:id="@+id/tv_no_events"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="No events on this date"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:padding="32dp"
+                android:visibility="gone" />
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

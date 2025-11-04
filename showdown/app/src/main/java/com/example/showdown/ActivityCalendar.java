@@ -4,28 +4,70 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.example.showdown.DBUser;
 import com.example.showdown.DBEvent;
 import com.example.showdown.DBEventTickets;
 import com.example.showdown.DBBookedTicket;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import CalendarView.CalendarView;
+import CalendarView.EventRecyclerView;
 
 public class ActivityCalendar extends AppCompatActivity {
-    private Button main_bttn;
-    private Button profile_bttn;
-    private Button eventButton;
+    private Button mainButton;
+    private Button profileButton;
+    private CalendarView calendarView;
+    private TextView tvSelectedDate;
+    private TextView tvEventsTitleDay;
+    private TextView tvEventsTitleMonth;
+    private LocalDate today;
+    private TextView tvNoEvents;
+    private RecyclerView rvEvents;
+    private EventRecyclerView eventAdapter;
+    private BottomSheetBehavior<View> bottomSheetBehavior;
+
+    private AppDatabase db;
+    private ExecutorService executorService;
+    private SimpleDateFormat displayDateFormat;
+    private DateTimeFormatter calendarDateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        Button eventButton = findViewById(R.id.eventButton);
-        eventButton.setClipToOutline(true);
+        db = AppDatabase.getInstance(this);
+        executorService = Executors.newSingleThreadExecutor();
+        displayDateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
+        calendarDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
-        main_bttn = findViewById(R.id.calendar_main_bttn);
-        main_bttn.setOnClickListener(new View.OnClickListener() {
+        initializeViews();
+        setupNavigationButtons();
+        setupBottomSheet();
+        setupRecyclerView();
+        setupCalendar();
+
+        mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ActivityCalendar.this, ActivityMain.class);
@@ -33,13 +75,174 @@ public class ActivityCalendar extends AppCompatActivity {
             }
         });
 
-        profile_bttn = findViewById(R.id.calendar_profile_bttn);
-        profile_bttn.setOnClickListener(new View.OnClickListener() {
+        profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ActivityCalendar.this, ActivityProfile.class);
                 startActivity(intent);
             }
         });
+    }
+
+    private void initializeViews() {
+        mainButton = findViewById(R.id.calendar_main_bttn);
+        profileButton = findViewById(R.id.calendar_profile_bttn);
+        calendarView = findViewById(R.id.calendar_view);
+        tvSelectedDate = findViewById(R.id.tv_selected_date);
+        tvEventsTitleDay = findViewById(R.id.tv_events_title_day);
+        tvEventsTitleMonth = findViewById(R.id.tv_events_title_month);
+        tvNoEvents = findViewById(R.id.tv_no_events);
+        rvEvents = findViewById(R.id.rv_events);
+    }
+
+    private void setupNavigationButtons() {
+        mainButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ActivityCalendar.this, ActivityMain.class);
+            startActivity(intent);
+        });
+
+        profileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(ActivityCalendar.this, ActivityProfile.class);
+            startActivity(intent);
+        });
+    }
+
+    private void setupBottomSheet() {
+        View bottomSheet = findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        // Configure bottom sheet
+        bottomSheetBehavior.setPeekHeight(100);
+        bottomSheetBehavior.setHideable(false);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                // Handle state changes if needed
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                // Handle sliding animation if needed
+            }
+        });
+        today = LocalDate.now();
+        Date todayDate = Date.from(today.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        String displayDay = displayDateFormat.format(todayDate);
+        long timestamp = todayDate.getTime();
+        loadEventsFromDatabase(timestamp,displayDay);
+    }
+
+    private void setupRecyclerView() {
+        eventAdapter = new EventRecyclerView(event -> {
+            // Handle book ticket click
+            Toast.makeText(this, "Booking ticket for: " + event.event.title, Toast.LENGTH_SHORT).show();
+            // TODO: Navigate to booking activity
+        });
+
+        rvEvents.setLayoutManager(new LinearLayoutManager(this));
+        rvEvents.setAdapter(eventAdapter);
+    }
+
+    private void setupCalendar() {
+        calendarView.setDateSelectedListener(selectedDates -> {
+            if (selectedDates != null && !selectedDates.isEmpty()) {
+                String selectedDate = selectedDates.get(0);
+                loadEventsForDate(selectedDate);
+            }
+        });
+    }
+
+    private void loadEventsForDate(String dateStr) {
+        try {
+            // Parse the date string (format: dd-MM-yyyy)
+            LocalDate localDate = LocalDate.parse(dateStr, calendarDateFormat);
+
+            // Update selected date display
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            String displayDate = displayDateFormat.format(date);
+            tvSelectedDate.setText(displayDate);
+
+            // Convert to timestamp (milliseconds since epoch)
+            long timestamp = date.getTime();
+
+            // Load events from database
+            loadEventsFromDatabase(timestamp, displayDate);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error loading events", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadEventsFromDatabase(long selectedDate, String displayDate) {
+        executorService.execute(() -> {
+            try {
+                // Get events for the selected date
+                List<DBEvent> events = db.eventsDao().getEventsByDate(selectedDate);
+
+                // Build EventWithDetails objects
+                List<EventWithDetails> eventDetailsList = new ArrayList<>();
+
+                for (DBEvent event : events) {
+                    EventWithDetails details = new EventWithDetails();
+                    details.event = event;
+
+                    // Get user information
+                    List<DBUser> users = db.userDao().getAllBlocking();
+                    for (DBUser user : users) {
+                        if (user.id == event.userId) {
+                            details.user = user;
+                            break;
+                        }
+                    }
+
+                    // Calculate available tickets
+                    Integer totalTickets = db.eventTicketDao().getTotalAvailableTickets(event.id);
+                    int bookedTickets = db.bookedTicketDao().getBookedCountByEvent(event.id);
+
+                    if (totalTickets != null) {
+                        details.availableTickets = totalTickets - bookedTickets;
+                    } else {
+                        details.availableTickets = 0;
+                    }
+
+                    eventDetailsList.add(details);
+                }
+
+                // Update UI on main thread
+                runOnUiThread(() -> {
+                    if (eventDetailsList.isEmpty()) {
+                        tvNoEvents.setVisibility(View.VISIBLE);
+                        rvEvents.setVisibility(View.GONE);
+                        tvEventsTitleDay.setText("No Events on " + displayDate);
+                    } else {
+                        tvNoEvents.setVisibility(View.GONE);
+                        rvEvents.setVisibility(View.VISIBLE);
+                        tvEventsTitleDay.setText("Events on " + displayDate);
+                        eventAdapter.setEvents(eventDetailsList);
+
+                        // Expand bottom sheet to show events
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Error loading events: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (executorService != null && !executorService.isShutdown()) {
+            executorService.shutdown();
+        }
     }
 }

@@ -16,8 +16,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DAOUser userDao();
     public abstract DAOEvent eventsDao();
-    public abstract DBEventTickets eventTicketDao();
-    public abstract DBBookedTicket bookedTicketDao();
+    public abstract DAOEventTickets eventTicketDao();
+    public abstract DAOBookedTicket bookedTicketDao();
     private static volatile AppDatabase INSTANCE;
 
     public static AppDatabase getInstance(Context context) {

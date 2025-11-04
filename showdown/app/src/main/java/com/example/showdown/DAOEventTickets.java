@@ -10,8 +10,15 @@ import java.util.List;
 @Dao
 public interface DAOEventTickets {
     @Insert
-    void insert(DBEventTickets tickets);
+    long insert(DBEventTickets tickets);
 
     @Query("SELECT * FROM tickets")
     List<DBEventTickets> getAllBlocking();
+
+    @Query("SELECT * FROM tickets WHERE eventsID = :eventId")
+    List<DBEventTickets> getTicketsByEventId(int eventId);
+
+    // Get total available tickets for an event
+    @Query("SELECT SUM(availableTickets) FROM tickets WHERE eventsID = :eventId")
+    Integer getTotalAvailableTickets(int eventId);
 }

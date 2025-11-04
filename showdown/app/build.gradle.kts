@@ -38,9 +38,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation(libs.room.common.jvm)
     implementation("androidx.room:room-runtime:${roomVersion}")
-    implementation(libs.room.runtime.android)
+    implementation("androidx.recyclerview:recyclerview:1.3.1")
+    implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
     annotationProcessor("androidx.room:room-compiler:${roomVersion}")
     testImplementation(libs.junit)
 

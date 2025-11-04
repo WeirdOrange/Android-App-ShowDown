@@ -25,6 +25,8 @@
     <string name="nav_profile">Profile</string>
 
     <string name="select_month">October 2025</string>
+    <string name="selected_date">23</string>
+    <string name="selected_month">October 2025</string>
 
     <string name="monday">Mon</string>
     <string name="tuesday">Tues</string>

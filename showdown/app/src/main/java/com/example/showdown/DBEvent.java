@@ -22,6 +22,7 @@ public class DBEvent {
     public String location;
     public long startDate;
     public long endDate;
+    public byte[] image;
 
-    public int userID;
+    public int userId;
 }

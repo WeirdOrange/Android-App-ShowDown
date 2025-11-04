@@ -6,9 +6,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View.OnClickListener;
 import android.view.View;
-import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.example.showdown.R;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,6 +67,7 @@ public class CalendarView extends LinearLayout {
     private void setupCalendar(){
         gridCalendarDays.removeAllViews();
         tvCurrentMonth.setText(currentMonth.format(monthFormat));
+//        tv_events_title_day.setText(tv_events_title_day)
 
         int firstDayOfWeek = currentMonth.getDayOfWeek().getValue() % 7;
 
