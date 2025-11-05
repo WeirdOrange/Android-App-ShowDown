@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/white">
     <Button
@@ -21,6 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
@@ -92,7 +94,7 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:textSize="8dp"
-                    android:text="0"
+                    android:text="1"
                     android:gravity="center"/>
             </GridLayout>
             <LinearLayout
@@ -124,7 +126,7 @@
                 android:layout_height="30dp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
-                android:paddingLeft="10sp"
+                android:paddingStart="10sp"
                 android:background="@color/secondary_light"
                 >
                 <TextView
@@ -145,112 +147,48 @@
 
             <GridLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:columnCount="2"
-                android:layout_marginTop="10sp"
+                android:layout_marginTop="10dp"
+                android:padding="10dp"
                 >
+
                 <androidx.cardview.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/cv_add_event"
                     android:layout_width="160dp"
                     android:layout_height="200dp"
-                    card_view:cardCornerRadius="12dp"
-                    card_view:cardElevation="4dp"
-                    card_view:cardBackgroundColor="#FFFFFF"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20sp"
-                    android:layout_marginTop="15sp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="@color/gray"
+                    android:layout_margin="8dp"
                     >
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:gravity="center">
+                        android:gravity="center"
+                        android:padding="16dp"
+                        >
                         <ImageView
-                            android:id="@+id/cardImage1"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:background="@color/gray"
-                            android:src="@drawable/picture" />
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:src="@android:drawable/ic_input_add"
+                            app:tint="@color/white" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="New Event?"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/white"
+                            android:layout_marginTop="16dp"/>
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="160dp"
-                    android:layout_height="200dp"
-                    card_view:cardCornerRadius="12dp"
-                    card_view:cardElevation="4dp"
-                    card_view:cardBackgroundColor="#FFFFFF"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="15sp"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <ImageView
-                            android:id="@+id/cardImage2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:background="@color/gray"
-                            android:src="@drawable/picture" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="160dp"
-                    android:layout_height="200dp"
-                    card_view:cardCornerRadius="12dp"
-                    card_view:cardElevation="4dp"
-                    card_view:cardBackgroundColor="#FFFFFF"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="40dp"
-                    android:layout_marginTop="15sp"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <ImageView
-                            android:id="@+id/cardImage3"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:background="@color/gray"
-                            android:src="@drawable/picture" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-                <androidx.cardview.widget.CardView
-                    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="160dp"
-                    android:layout_height="200dp"
-                    card_view:cardCornerRadius="12dp"
-                    card_view:cardElevation="4dp"
-                    card_view:cardBackgroundColor="#FFFFFF"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="15sp"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center">
-                        <ImageView
-                            android:id="@+id/cardImage4"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            android:background="@color/gray"
-                            android:src="@drawable/picture" />
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_user_posts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"/>
             </GridLayout>
         </LinearLayout>
     </ScrollView>

@@ -11,8 +11,8 @@
     <string name="new_tag">New to Here? </string>
     <string name="ask_signup_tag"> Sign Up Now</string>
 
-    <string name="username_tag">Email:</string>
-    <string name="username_hint">Enter Email</string>
+    <string name="username_tag">Username:</string>
+    <string name="username_hint">Enter Username</string>
     <string name="cfm_password_tag">Confirm Password:</string>
     <string name="cfm_password_hint">Enter Confirm Password</string>
 

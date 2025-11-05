@@ -1,10 +1,23 @@
 package com.example.showdown;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import com.example.showdown.DBBookedTicket;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Dao
 public interface DAOBookedTicket {

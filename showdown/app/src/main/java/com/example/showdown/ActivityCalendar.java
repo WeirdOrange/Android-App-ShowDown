@@ -66,22 +66,6 @@ public class ActivityCalendar extends AppCompatActivity {
         setupBottomSheet();
         setupRecyclerView();
         setupCalendar();
-
-        mainButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ActivityCalendar.this, ActivityMain.class);
-                startActivity(intent);
-            }
-        });
-
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ActivityCalendar.this, ActivityProfile.class);
-                startActivity(intent);
-            }
-        });
     }
 
     private void initializeViews() {
@@ -137,8 +121,8 @@ public class ActivityCalendar extends AppCompatActivity {
     private void setupRecyclerView() {
         eventAdapter = new EventRecyclerView(event -> {
             // Handle book ticket click
-            Toast.makeText(this, "Booking ticket for: " + event.event.title, Toast.LENGTH_SHORT).show();
-            // TODO: Navigate to booking activity
+            Intent intent = new Intent(ActivityCalendar.this, ActivityMain.class);
+            intent.putExtra("Event_ID", event.event.id);
         });
 
         rvEvents.setLayoutManager(new LinearLayoutManager(this));
@@ -164,10 +148,8 @@ public class ActivityCalendar extends AppCompatActivity {
             String displayDate = displayDateFormat.format(date);
             tvSelectedDate.setText(displayDate);
 
-            // Convert to timestamp (milliseconds since epoch)
             long timestamp = date.getTime();
 
-            // Load events from database
             loadEventsFromDatabase(timestamp, displayDate);
 
         } catch (Exception e) {
@@ -181,7 +163,6 @@ public class ActivityCalendar extends AppCompatActivity {
             try {
                 // Get events for the selected date
                 List<DBEvent> events = db.eventsDao().getEventsByDate(selectedDate);
-
                 // Build EventWithDetails objects
                 List<EventWithDetails> eventDetailsList = new ArrayList<>();
 
@@ -216,7 +197,8 @@ public class ActivityCalendar extends AppCompatActivity {
                     if (eventDetailsList.isEmpty()) {
                         tvNoEvents.setVisibility(View.VISIBLE);
                         rvEvents.setVisibility(View.GONE);
-                        tvEventsTitleDay.setText("No Events on " + displayDate);
+                        tvEventsTitleDay.setText(displayDate.split(" ")[1]);
+                        tvEventsTitleMonth.setText(displayDate.split(" ")[0] + displayDate.split(" ")[2]);
                     } else {
                         tvNoEvents.setVisibility(View.GONE);
                         rvEvents.setVisibility(View.VISIBLE);
