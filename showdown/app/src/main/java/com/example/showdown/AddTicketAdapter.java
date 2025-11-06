@@ -61,11 +61,11 @@ public class AddTicketAdapter extends RecyclerView.Adapter<AddTicketAdapter.Tick
         holder.tvTime.setText(ticket.displayTime);
         holder.tvAmount.setText(String.valueOf(ticket.availableTickets));
 
-        holder.btnDelete.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(v -> {
             if (deleteListener != null) {
                 int item = holder.getBindingAdapterPosition();
                 if (item != RecyclerView.NO_POSITION) {
-                    deleteListener.onTicketDelete(position);
+                    deleteListener.onTicketDelete(item);
                 }
             }
         });
@@ -78,14 +78,12 @@ public class AddTicketAdapter extends RecyclerView.Adapter<AddTicketAdapter.Tick
 
     static class TicketViewHolder extends RecyclerView.ViewHolder {
         TextView tvDate, tvTime, tvAmount;
-        ImageButton btnDelete;
 
         public TicketViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tv_ticket_date);
             tvTime = itemView.findViewById(R.id.tv_ticket_time);
             tvAmount = itemView.findViewById(R.id.tv_available_tickets);
-            btnDelete = itemView.findViewById(R.id.ticket_slot);
         }
     }
 }

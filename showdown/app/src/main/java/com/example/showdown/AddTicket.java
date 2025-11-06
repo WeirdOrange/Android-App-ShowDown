@@ -42,6 +42,9 @@ public class AddTicket {
     public AddTicket(Context ctx, OnTicketAddedListener listener) {
         this.context = ctx;
         this.listener = listener;
+
+        this.dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        this.timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     }
 
     private void showDatePicker (Button date, Button time) {
@@ -65,7 +68,6 @@ public class AddTicket {
                     selectedDateTime = selectedDate.getTimeInMillis();
                     date.setText(dateFormat.format(selectedDate.getTime()));
 
-                    // Update time display if time was already set
                     if (selectedDate.get(Calendar.HOUR_OF_DAY) != 0 || selectedDate.get(Calendar.MINUTE) != 0) {
                         time.setText(timeFormat.format(selectedDate.getTime()));
                     }
@@ -100,6 +102,7 @@ public class AddTicket {
                 calendar.get(Calendar.MINUTE),
                 true // 24 hour format instead of 12 hour format
         );
+        timePickerDialog.show();
     }
 
     public void show() {

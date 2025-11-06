@@ -82,6 +82,7 @@
         </LinearLayout>
     </FrameLayout>
     <TextView
+        android:id="@+id/posted_on"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Posted On: Dec 1, 2025"

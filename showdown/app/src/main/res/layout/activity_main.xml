@@ -8,13 +8,13 @@
     android:background="#E3E1FF"
     android:weightSum="100">
 
+    <include layout="@layout/navbar" />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#E3E1FF"
         android:orientation="vertical">
 
-        <include layout="@layout/navbar" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,7 +71,7 @@
                 android:paddingStart="40dp"
                 android:paddingEnd="40dp"/>
 
-            <ScrollView
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_gradient2"
@@ -236,8 +236,8 @@
                             android:text="Get Ticket" />
                     </GridLayout>
                 </LinearLayout>
-            </ScrollView>
+            </androidx.core.widget.NestedScrollView>
+            <include layout="@layout/bottomsheet_card" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <include layout="@layout/bottomsheet_card" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

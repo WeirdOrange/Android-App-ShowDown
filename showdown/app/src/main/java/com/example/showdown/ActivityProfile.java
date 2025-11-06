@@ -88,7 +88,7 @@ public class ActivityProfile extends AppCompatActivity {
                     details.event = e;
 
                     // Organizer
-                    DBUser organizer = db.userDao().getUserById(e.userId);
+                    DBUser organizer = db.userDao().getUserById(currentUserId);
                     details.user = organizer;
 
                     // Tickets

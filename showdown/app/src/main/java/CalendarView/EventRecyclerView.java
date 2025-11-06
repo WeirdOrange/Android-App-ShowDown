@@ -92,7 +92,7 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
         } else {
             holder.tvAvailableTickets.setText("Sold out");
             holder.tvAvailableTickets.setTextColor(
-                    ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark)
+                    ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_red_dark)
             );
             holder.btnBook.setEnabled(false);
         }

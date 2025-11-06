@@ -38,6 +38,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.room:room-runtime:${roomVersion}")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")

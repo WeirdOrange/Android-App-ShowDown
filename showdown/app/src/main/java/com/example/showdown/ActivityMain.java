@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -24,11 +27,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ActivityMain extends AppCompatActivity {
-    private Button btnGetTicket, btnWhatsapp, btnInfo, navigation_bttn;
+    private Button btnGetTicket, btnWhatsapp, btnInfo, navigation_bttn, btnCloseSheet;
     private ImageButton profile_bttn;
     private TextView tvEventTitle, tvEventDescription, tvEventLocation, tvEventStartDate, tvEventEndDate, tvEventOrganizer, tvEventContact;
     private RecyclerView rvEventCarousel;
     private EventCarouselAdapter carouselAdapter;
+    private BottomSheetBehavior<FrameLayout> bottomSheetBehavior;
+    private FrameLayout bottomSheet;
 
     private AppDatabase db;
     private ExecutorService executorService;
@@ -59,6 +64,7 @@ public class ActivityMain extends AppCompatActivity {
 
         initializeViews();
         setupCarousel();
+        setupBottomSheet();
 
         // eventID checker if an ID was passed from CalendarView or ProfileView
         Intent intent = getIntent();
@@ -104,6 +110,27 @@ public class ActivityMain extends AppCompatActivity {
         btnGetTicket = findViewById(R.id.btn_get_ticket);
         btnWhatsapp = findViewById(R.id.event_contact);
         btnInfo = findViewById(R.id.event_info);
+
+        bottomSheet = findViewById(R.id.bottom_sheet);
+        btnCloseSheet = findViewById(R.id.btn_close_sheet);
+    }
+
+    private void setupBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        bottomSheetBehavior.setPeekHeight(0);
+
+        btnCloseSheet.setOnClickListener(v ->
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+        );
+        btnInfo.setOnClickListener(v -> {
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            } else {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+        });
     }
 
     private int findCenterItemPosition(LinearLayoutManager layoutManager) {

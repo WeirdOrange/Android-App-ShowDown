@@ -11,7 +11,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="220dp"
         android:orientation="vertical"
         android:clipChildren="false">
 
@@ -33,7 +33,7 @@
             android:padding="16dp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 >
@@ -42,9 +42,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Event Title"
-                    android:textSize="18sp"
+                    android:textSize="26sp"
                     android:textStyle="bold"
                     android:layout_weight="1"
+                    android:fontFamily="@font/nats_regular"
                     android:textColor="@android:color/black" />
                 <TextView
                     android:id="@+id/tv_event_date"
@@ -63,11 +64,11 @@
                 android:id="@+id/tv_event_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:text="Event description goes here"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textColor="@android:color/tertiary_text_dark"
-                android:maxLines="3"
+                android:fontFamily="@font/nats_regular"
+                android:maxLines="1"
                 android:ellipsize="end" />
 
             <LinearLayout
@@ -81,8 +82,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Location"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:textColor="@android:color/tertiary_text_dark"
+                    android:fontFamily="@font/nats_regular"
                     android:paddingTop="5dp"
                     android:drawableStart="@android:drawable/ic_dialog_map"
                     android:drawablePadding="4dp"
@@ -101,9 +103,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="100 tickets available"
-                    android:textSize="12sp"
+                    android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/holo_green_dark"
+                    android:textColor="@android:color/holo_green_light"
+                    android:fontFamily="@font/nats_regular"
                     />
 
                 <Button
@@ -114,6 +117,7 @@
                     android:textSize="12sp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
+                    android:backgroundTint="@color/secondary_dark"
                     />
             </LinearLayout>
         </LinearLayout>

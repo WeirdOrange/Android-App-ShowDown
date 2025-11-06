@@ -7,7 +7,7 @@ public class EventWithDetails {
     @Embedded
     public DBEvent event;
     @Relation(
-            parentColumn = "userID",
+            parentColumn = "userId",
             entityColumn = "id"
     )
     public DBUser user;
