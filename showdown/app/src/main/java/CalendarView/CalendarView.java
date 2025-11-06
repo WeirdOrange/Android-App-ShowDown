@@ -101,13 +101,9 @@ public class CalendarView extends LinearLayout {
                 @Override
                 public void onClick(View v) {
                     LocalDate clickedDate = (LocalDate) v.getTag();
-                    if (selectedDate.contains(clickedDate)) {
-                        selectedDate.remove(clickedDate);
-                        v.setSelected(false);
-                    } else {
-                        selectedDate.add(clickedDate);
-                        v.setSelected(true);
-                    }
+                    selectedDate.clear();
+                    selectedDate.add(clickedDate);
+                    v.setSelected(true);
 
                     if (dateSelectedListener != null) {
                         dateSelectedListener.onDateSelected(getSelectedDates());

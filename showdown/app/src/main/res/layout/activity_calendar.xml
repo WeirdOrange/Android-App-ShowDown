@@ -2,48 +2,48 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <include layout="@layout/navbar" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginTop="50dp"
         >
-
-        <GridLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:rowCount="1"
-            android:columnCount="4"
-            android:useDefaultMargins="true"
-            android:layout_marginTop="50dp"
-            android:background="@color/white">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/toggle_nav_btn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginEnd="50dp"
+                android:background="@drawable/menu_icon"
+                />
             <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="0.5" />
-            <Button
-                android:id="@+id/calendar_main_bttn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
-            <Button
-                android:id="@+id/calendar_bttn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                />
-            <Button
-                android:id="@+id/calendar_profile_bttn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageButton
+                android:id="@+id/profile_bttn"
                 android:layout_width="40dp"
                 android:layout_height="45dp"
                 android:layout_gravity="end"
-                android:layout_columnWeight="1"
+                android:padding="0dp"
+                android:src="@drawable/account_circle"
+                android:background="@android:color/transparent"
+                android:text="@string/nav_profile"
                 />
-        </GridLayout>
+        </FrameLayout>
+
         <CalendarView.CalendarView
             android:id="@+id/calendar_view"
             android:layout_width="match_parent"
@@ -69,8 +69,9 @@
         android:background="@drawable/edittext_border"
         android:padding="16dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        app:behavior_peekHeight="100dp"
-        app:behavior_hideable="false">
+        app:behavior_peekHeight="200dp"
+        app:behavior_hideable="false"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -23,14 +23,16 @@ import java.util.concurrent.Executors;
 
 
 public class ActivityProfile extends AppCompatActivity {
-    private Button btnHome;
     private CardView cvAddEvent;
     private RecyclerView rvUserPosts;
     private ProfilePostsAdapter postsAdapter;
+    private Button navigation_bttn;
+
     private AppDatabase db;
     private ExecutorService executorService;
     private int currentUserId = 1; // TODO: Replace with actual logged-in user ID
     private List<DBEvent> userEvents;
+    private ActivityNavigation navHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,26 +42,29 @@ public class ActivityProfile extends AppCompatActivity {
         db = AppDatabase.getInstance(this);
         executorService = Executors.newSingleThreadExecutor();
 
+        navHelper = new ActivityNavigation(this);
+        navigation_bttn = findViewById(R.id.toggle_nav_btn);
+        navigation_bttn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navHelper.toggle();
+            }
+        });
+
         initializeViews();
         setupAddEventCard();
         loadUserPosts();
 
-        btnHome.setOnClickListener(v -> {
-            Intent intent = new Intent(ActivityProfile.this, ActivityMain.class);
-            startActivity(intent);
-        });
     }
 
     private void initializeViews() {
-        btnHome = findViewById(R.id.profile_main);
         cvAddEvent = findViewById(R.id.cv_add_event);
         rvUserPosts = findViewById(R.id.rv_user_posts);
 
-//        postsAdapter = new ProfilePostsAdapter(event -> {
-//            Intent intent = new Intent(ActivityProfile.this, ActivityMain.class);
-//            intent.putExtra("Event_ID", event.eventId);
-//            startActivity(intent);
-//        });
+        postsAdapter = new ProfilePostsAdapter(event -> {
+            Intent intent = new Intent(ActivityProfile.this, ActivityProfile.class);
+            startActivity(intent);
+        });
 
         rvUserPosts.setLayoutManager(new GridLayoutManager(this, 2));
         rvUserPosts.setAdapter(postsAdapter);

@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,7 +26,6 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
     private List<EventWithDetails> events;
     private OnEventClickListener listener;
     private SimpleDateFormat mDateFormat;
-
 
     public interface OnEventClickListener {
         void onBookClick(EventWithDetails event);
@@ -55,15 +55,17 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
     }
 
     static class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvDescription, tvOrganizer, tvLocation, tvAvailableTickets;
+        TextView tvTitle, tvDescription, tvEventDate, tvLocation, tvAvailableTickets;
+        ImageView tvCardImage;
         Button btnBook;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_event_title);
             tvDescription = itemView.findViewById(R.id.tv_event_description);
-            tvOrganizer = itemView.findViewById(R.id.tv_event_organizer);
+            tvEventDate = itemView.findViewById(R.id.tv_event_date);
             tvLocation = itemView.findViewById(R.id.tv_event_location);
+            tvCardImage = itemView.findViewById(R.id.card_bg_image);
             tvAvailableTickets = itemView.findViewById(R.id.tv_available_tickets);
             btnBook = itemView.findViewById(R.id.btn_book_ticket);
         }
@@ -73,15 +75,16 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         EventWithDetails eventDetails = events.get(position);
         DBEvent event = eventDetails.event;
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
         holder.tvTitle.setText(event.title);
         holder.tvDescription.setText(event.description);
         holder.tvLocation.setText(event.location);
-        holder.tvOrganizer.setText("By " + eventDetails.user.name);
+        holder.tvEventDate.setText(sdf.format(event.startDate));
 
         int available = eventDetails.availableTickets;
         if (available > 0){
-            holder.tvAvailableTickets.setText(available + "tickets available");
+            holder.tvAvailableTickets.setText(available + " tickets available");
             holder.tvAvailableTickets.setTextColor(
                     ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark)
             );
@@ -101,5 +104,4 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
         });
 
     }
-
 }

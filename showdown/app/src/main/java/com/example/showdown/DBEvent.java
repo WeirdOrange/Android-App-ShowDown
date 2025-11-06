@@ -23,6 +23,7 @@ public class DBEvent {
     public long startDate;
     public long endDate;
     public byte[] image;
+    public boolean active;
 
     public int userId;
 }

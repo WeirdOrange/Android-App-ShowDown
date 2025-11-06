@@ -34,12 +34,9 @@ import CalendarView.CalendarView;
 import CalendarView.EventRecyclerView;
 
 public class ActivityCalendar extends AppCompatActivity {
-    private Button mainButton;
-    private Button profileButton;
+    private Button mainButton, profileButton;
     private CalendarView calendarView;
-    private TextView tvSelectedDate;
-    private TextView tvEventsTitleDay;
-    private TextView tvEventsTitleMonth;
+    private TextView tvSelectedDate, tvEventsTitleDay, tvEventsTitleMonth;
     private LocalDate today;
     private TextView tvNoEvents;
     private RecyclerView rvEvents;
@@ -50,6 +47,7 @@ public class ActivityCalendar extends AppCompatActivity {
     private ExecutorService executorService;
     private SimpleDateFormat displayDateFormat;
     private DateTimeFormatter calendarDateFormat;
+    private ActivityNavigation navHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +56,19 @@ public class ActivityCalendar extends AppCompatActivity {
 
         db = AppDatabase.getInstance(this);
         executorService = Executors.newSingleThreadExecutor();
-        displayDateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
+        displayDateFormat = new SimpleDateFormat("MMMM dd yyyy", Locale.getDefault());
         calendarDateFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
+        navHelper = new ActivityNavigation(this);
+        findViewById(R.id.toggle_nav_btn).setOnClickListener(v -> navHelper.toggle());
+
         initializeViews();
-        setupNavigationButtons();
         setupBottomSheet();
         setupRecyclerView();
         setupCalendar();
     }
 
     private void initializeViews() {
-        mainButton = findViewById(R.id.calendar_main_bttn);
-        profileButton = findViewById(R.id.calendar_profile_bttn);
         calendarView = findViewById(R.id.calendar_view);
         tvSelectedDate = findViewById(R.id.tv_selected_date);
         tvEventsTitleDay = findViewById(R.id.tv_events_title_day);
@@ -79,24 +77,12 @@ public class ActivityCalendar extends AppCompatActivity {
         rvEvents = findViewById(R.id.rv_events);
     }
 
-    private void setupNavigationButtons() {
-        mainButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ActivityCalendar.this, ActivityMain.class);
-            startActivity(intent);
-        });
-
-        profileButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ActivityCalendar.this, ActivityProfile.class);
-            startActivity(intent);
-        });
-    }
-
     private void setupBottomSheet() {
         View bottomSheet = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
         // Configure bottom sheet
-        bottomSheetBehavior.setPeekHeight(100);
+        bottomSheetBehavior.setPeekHeight(200);
         bottomSheetBehavior.setHideable(false);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
