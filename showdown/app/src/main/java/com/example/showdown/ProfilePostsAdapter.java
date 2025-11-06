@@ -1,9 +1,12 @@
 package com.example.showdown;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,7 +20,7 @@ import java.util.Locale;
 
 public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapter.EventViewHolder> {
     private List<EventWithDetails> events;
-    private OnEventClickListener listener;
+    private final OnEventClickListener listener;
     private SimpleDateFormat mDateFormat;
 
     public interface OnEventClickListener {
@@ -35,11 +38,16 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
         notifyDataSetChanged();
     }
 
+    public void updateEvents(List<EventWithDetails> newEvents) {
+        this.events = newEvents;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public EventViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_event_card, parent, false);
+                .inflate(R.layout.profile_post_item, parent, false);
         return new EventViewHolder(view);
     }
 
@@ -51,12 +59,13 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
     static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvDescription, tvEventStartDate, tvEventEndDate, tvLocation, tvAvailableTickets;
         Button btnBook;
+        ImageView eventImage;
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_event_title);
             tvEventStartDate = itemView.findViewById(R.id.post_start_date);
             tvEventEndDate = itemView.findViewById(R.id.post_end_date);
-
+            eventImage = itemView.findViewById(R.id.iv_post_image);
         }
     }
 
@@ -68,7 +77,6 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
         holder.tvTitle.setText(event.title);
         holder.tvDescription.setText(event.description);
         holder.tvLocation.setText(event.location);
-
 
         int available = eventDetails.availableTickets;
         if (available > 0) {
@@ -84,10 +92,10 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
             holder.btnBook.setEnabled(false);
         }
 
-        holder.btnBook.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onBookClick(eventDetails);
-            }
-        });
+        if (event.image != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(event.image, 0, event.image.length);
+            holder.eventImage.setImageBitmap(bmp);
+        }
+        holder.itemView.setOnClickListener(v -> listener.onBookClick(eventDetails));
     }
 }

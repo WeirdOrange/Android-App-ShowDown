@@ -11,7 +11,7 @@ import android.widget.Button;
 
 public class ActivityNavigation {
     private final Activity currentActivity;
-    private View navbar, rootView;
+    private View navbar, rootView, overlay;
     private Button mainButton, calendarButton, settingButton;
 
     public ActivityNavigation(Activity activity) {
@@ -40,10 +40,13 @@ public class ActivityNavigation {
         if (navbar.getVisibility() == View.VISIBLE) {
             navbar.animate().translationY(navbar.getHeight()).alpha(0f).setDuration(300)
                     .withEndAction(() -> navbar.setVisibility(View.GONE));
+            overlay.setVisibility(View.VISIBLE);
         } else {
             navbar.setVisibility(View.VISIBLE);
             navbar.setTranslationY(navbar.getHeight());
             navbar.animate().translationY(0).alpha(1f).setDuration(300);
+
+            overlay.setVisibility(View.GONE);
         }
     }
 

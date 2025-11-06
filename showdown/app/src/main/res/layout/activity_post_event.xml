@@ -180,7 +180,6 @@
                 tools:ignore="RtlSymmetry" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cv_add_ticket"
                 android:layout_width="300dp"
                 android:layout_height="40dp"
                 app:cardCornerRadius="12dp"
@@ -188,14 +187,32 @@
                 app:cardBackgroundColor="@color/gray"
                 android:layout_margin="8dp"
                 >
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="30dp"
+                <ImageButton
+                    android:id="@+id/cv_add_ticket"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:src="@android:drawable/ic_input_add"
                     android:layout_gravity="center"
+                    app:backgroundTint="@color/gray"
                     app:tint="@color/white" />
             </androidx.cardview.widget.CardView>
+            <TextView
+                android:id="@+id/tv_ticket_count"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:text="No tickets added yet"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:layout_marginTop="4dp"
+                android:visibility="visible"/>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_ticket_list"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 

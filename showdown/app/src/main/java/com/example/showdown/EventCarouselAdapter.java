@@ -88,8 +88,8 @@ public class EventCarouselAdapter extends RecyclerView.Adapter<EventCarouselAdap
             holder.eventImage.setColorFilter(filter);
             holder.eventImage.setAlpha(0.5f);
             holder.cardview.setCardElevation(4f);
-            holder.cardview.setScaleX(0.85f);
-            holder.cardview.setScaleY(0.5f);
+            holder.cardview.setScaleY(0.75f);
+            holder.cardview.setScaleX(0.75f);
         }
 
         holder.cardview.setOnClickListener(v -> {

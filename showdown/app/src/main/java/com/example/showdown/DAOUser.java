@@ -14,6 +14,8 @@ public interface DAOUser {
     @Query("SELECT * FROM users")
     List<DBUser> getAllBlocking();
 
+    @Query("SELECT * FROM users WHERE id = :id")
+    DBUser getUserById(int id);
     @Query("SELECT * FROM users WHERE email = :email AND password = :password LIMIT 1")
     DBUser login(String email, String password);
 

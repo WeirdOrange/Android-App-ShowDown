@@ -1,9 +1,13 @@
 package com.example.showdown;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
@@ -37,6 +43,7 @@ public class ActivityCalendar extends AppCompatActivity {
     private Button mainButton, profileButton;
     private CalendarView calendarView;
     private TextView tvSelectedDate, tvEventsTitleDay, tvEventsTitleMonth;
+    private ImageView ivEventImage;
     private LocalDate today;
     private TextView tvNoEvents;
     private RecyclerView rvEvents;
@@ -75,6 +82,7 @@ public class ActivityCalendar extends AppCompatActivity {
         tvEventsTitleMonth = findViewById(R.id.tv_events_title_month);
         tvNoEvents = findViewById(R.id.tv_no_events);
         rvEvents = findViewById(R.id.rv_events);
+        ivEventImage = findViewById(R.id.card_bg_image);
     }
 
     private void setupBottomSheet() {
@@ -173,6 +181,11 @@ public class ActivityCalendar extends AppCompatActivity {
                         details.availableTickets = totalTickets - bookedTickets;
                     } else {
                         details.availableTickets = 0;
+                    }
+
+                    if (event.image != null && event.image.length > 0) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(details.event.image, 0, event.image.length);
+                        ivEventImage.setImageBitmap(bitmap);
                     }
 
                     eventDetailsList.add(details);
