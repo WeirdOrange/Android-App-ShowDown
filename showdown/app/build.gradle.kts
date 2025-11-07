@@ -38,6 +38,8 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0")
+    implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:10.x.x")
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("androidx.room:room-runtime:${roomVersion}")
     implementation("androidx.recyclerview:recyclerview:1.3.1")

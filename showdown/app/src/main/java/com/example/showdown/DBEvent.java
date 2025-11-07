@@ -4,13 +4,25 @@ import androidx.room.PrimaryKey;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 
-@Entity(tableName = "events",foreignKeys = @ForeignKey(
-        entity = DBUser.class,           // ← Parent table
-        parentColumns = "id",          // ← Parent PK
-        childColumns = "userId",       // ← Child FK column
-        onDelete = ForeignKey.CASCADE  // ← Optional: delete events if user is deleted
-),
-        indices = {@Index("userId")}
+@Entity(tableName = "events",
+        foreignKeys = {
+                @ForeignKey(
+                        entity = DBUser.class,           // ← Parent table
+                        parentColumns = "id",          // ← Parent PK
+                        childColumns = "userId",       // ← Child FK column
+                        onDelete = ForeignKey.CASCADE  // ← Optional: delete events if user is deleted
+                ),
+                @ForeignKey(
+                        entity = DBLocation.class,           // ← Parent table
+                        parentColumns = "id",          // ← Parent PK
+                        childColumns = "locationId",       // ← Child FK column
+                        onDelete = ForeignKey.CASCADE  // ← Optional: delete events if user is deleted
+                ),
+        },
+        indices = {
+                @Index("userId"),
+                @Index("userId")
+        }
 )
 public class DBEvent {
     @PrimaryKey(autoGenerate = true)
@@ -18,12 +30,12 @@ public class DBEvent {
 
     public String title;
     public String description;
-    public long publishedDate;   // timestamp of the day (00:00)
-    public String location;
+    public long publishedDate;
     public long startDate;
     public long endDate;
     public byte[] image;
     public boolean active;
 
     public int userId;
+    public int locationId;
 }

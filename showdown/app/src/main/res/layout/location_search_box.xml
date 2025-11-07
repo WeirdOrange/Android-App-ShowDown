@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="50dp"
+        />
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/sv_location_search"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:queryHint="Search for location (e.g., Kuala Lumpur)"
+        app:iconifiedByDefault="false" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_location_suggestions"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/et_event_location"
+        android:background="@android:drawable/dialog_holo_light_frame"
+        android:clipToPadding="false"
+        android:padding="8dp"
+        android:visibility="visible" />
+</FrameLayout>

@@ -6,7 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +38,19 @@ import java.util.concurrent.Executors;
 
 import CalendarView.EventRecyclerView;
 
+import com.mapbox.api.geocoding.v5.models.CarmenFeature;
+import com.mapbox.search.MapboxSearchSdk;
+import com.mapbox.search.SearchEngine;
+import com.mapbox.search.SearchSuggestionsCallback;
+import com.mapbox.search.SearchSuggestion;
+import com.mapbox.search.offline.OfflineSearchCallback;
+import com.mapbox.search.offline.OfflineSearchResult;
+import com.mapbox.search.result.SearchResultSuggestion;
+import com.mapbox.search.ui.adapter.simple.MapboxSearchAdapter;
+import com.mapbox.search.ui.adapter.simple.MapboxSearchAdapterListener;
+import com.mapbox.geojson.Point;
+import androidx.appcompat.widget.SearchView;
+
 public class ActivityAddEvent extends AppCompatActivity {
     private EditText etTitle, etDescription, etLocation;
     private Button btnSelectStartDate, btnSelectEndDate, btnPublish;
@@ -53,6 +70,10 @@ public class ActivityAddEvent extends AppCompatActivity {
     private long endDateTimestamp = 0;
     private int currentUserId = 1;
     private byte[] selectedImageBytes = null;
+
+    private CarmenFeature selectedFeature;
+    private double selectedLat = 0.0;
+    private double selectedLng = 0.0;
 
     // Image picker launcher
     private final ActivityResultLauncher<Intent> imagePickerLauncher =
@@ -79,6 +100,12 @@ public class ActivityAddEvent extends AppCompatActivity {
         initializeViews();
         setupTicketRecyclerView();
         setupClickListeners();
+
+        MapboxSearchSdk.initialize(
+                this,
+                getString(R.string.mapbox_access_token)
+        );
+        searchEngine = SearchEngine.createSearchEngine();
     }
 
     private void initializeViews() {
@@ -93,6 +120,8 @@ public class ActivityAddEvent extends AppCompatActivity {
         cvAddTicket = findViewById(R.id.cv_add_ticket);
         rvTicketList = findViewById(R.id.rv_ticket_list);
         tvTicketCount = findViewById(R.id.tv_ticket_count);
+
+        svLocationSearch = findViewById(R.id.sv_location_search);
     }
 
     private void setupTicketRecyclerView() {
@@ -212,6 +241,62 @@ public class ActivityAddEvent extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+    private void setupLocationSearch() {
+        etLocation.addTextChangedListener(new TextWatcher() {
+            private Handler handler = new Handler(Looper.getMainLooper());
+            private Runnable searchRunnable;
+            private final long DEBOUNCE_MS = 500;
+
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (searchRunnable != null) handler.removeCallbacks(searchRunnable);
+
+                String query = s.toString().trim();
+                if (query.length() < 3) {
+                    hideSuggestions();
+                    return;
+                }
+
+                searchRunnable = () -> performGeocodingSearch(query);
+                handler.postDelayed(searchRunnable, DEBOUNCE_MS);
+            }
+        });
+    }
+
+    private void performGeocodingSearch(String query) {
+        MapboxGeocoding client = MapboxGeocoding.builder()
+                .accessToken(getString(R.string.mapbox_access_token))
+                .query(query)
+                .build();
+
+        client.enqueueCall(new Callback<GeocodingResponse>() {
+            @Override
+            public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
+                List<CarmenFeature> results = response.body().features();
+                if (results == null || results.isEmpty()) {
+                    runOnUiThread(() -> hideSuggestions());
+                    return;
+                }
+
+                runOnUiThread(() -> {
+                    searchAdapter.updateSuggestions(results);
+                    rvLocationSuggestions.setVisibility(View.VISIBLE);
+                });
+            }
+
+            @Override
+            public void onFailure(Call<GeocodingResponse> call, Throwable t) {
+                runOnUiThread(() -> {
+                    Toast.makeText(ActivityAddEvent.this, "Search failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                    hideSuggestions();
+                });
+            }
+        });
+    }
+
     private void publishEvent() {
         String title = etTitle.getText().toString().trim();
         String description = etDescription.getText().toString().trim();
@@ -313,5 +398,9 @@ public class ActivityAddEvent extends AppCompatActivity {
         if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdown();
         }
+        if (searchEngine != null) {
+            searchEngine.cancel();
+        }
+        MapboxSearchSdk.terminate();
     }
 }
