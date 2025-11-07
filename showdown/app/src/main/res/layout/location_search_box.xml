@@ -1,31 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center"
     android:orientation="vertical"
-    android:padding="12dp">
+    >
 
-    <com.mapbox.mapboxsdk.maps.MapView
-        android:id="@+id/mapView"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="50dp"
-        />
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/sv_location_search"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:queryHint="Search for location (e.g., Kuala Lumpur)"
-        app:iconifiedByDefault="false" />
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_location_suggestions"
-        android:layout_width="300sp"
+    <EditText
+        android:id="@+id/query_text"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_below="@id/et_event_location"
-        android:background="@android:drawable/dialog_holo_light_frame"
-        android:clipToPadding="false"
-        android:padding="8dp"
-        android:visibility="visible" />
-</FrameLayout>
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:autofillHints="@null"
+        android:background="@drawable/edittext_border"
+        android:elevation="4dp"
+        android:hint="Enter Location"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:inputType="text"
+        android:minHeight="?actionBarSize"
+        />
+
+        <com.mapbox.search.ui.view.SearchResultsView
+            android:id="@+id/search_results_view"
+            android:layout_width="350dp"
+            android:layout_height="50dp"
+            android:visibility="gone"
+            />
+
+        <com.mapbox.maps.MapView
+            android:id="@+id/map"
+            android:layout_width="350dp"
+            android:layout_height="200dp"
+            android:layout_margin="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pin_correction_note"
+            />
+
+        <Space
+            android:id="@+id/map_center"
+            android:layout_width="1dp"
+            android:layout_height="1dp"
+            />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+        <Button
+            android:id="@+id/btn_confirm_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm"
+            android:fontFamily="@font/nats_regular"
+            android:textSize="14sp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@android:color/holo_green_light"/>
+
+        <Button
+            android:id="@+id/btn_cancel_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:fontFamily="@font/nats_regular"
+            android:textSize="14sp"
+            android:backgroundTint="@android:color/darker_gray"/>
+    </LinearLayout>
+</LinearLayout>

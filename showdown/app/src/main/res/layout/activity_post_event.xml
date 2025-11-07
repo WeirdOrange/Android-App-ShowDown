@@ -120,27 +120,12 @@
                 android:layout_marginTop="10sp"
                 android:text="Location"
                 tools:ignore="RtlSymmetry" />
-            <EditText
-                android:id="@+id/et_event_location"
-                android:layout_width="300sp"
-                android:layout_height="40sp"
-                android:background="@drawable/edittext_border"
-                android:layout_marginTop="5sp"
-                android:importantForAutofill="no"
-                android:paddingStart="8sp"
-                android:hint="Enter Location"
-                android:fontFamily="@font/nats_regular"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:inputType="textMultiLine"
-                tools:ignore="RtlSymmetry"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10sp"
-                android:layout_marginEnd="190dp"
                 android:text="Start Date:"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 tools:ignore="RtlSymmetry" />
             <Button
                 android:id="@+id/btn_select_start_date"
@@ -149,16 +134,14 @@
                 android:background="@drawable/edittext_border"
                 android:layout_marginTop="5sp"
                 android:text="Select Start Date"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="12sp"
                 android:gravity="center"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10sp"
-                android:layout_marginEnd="200dp"
                 android:text="End Date:"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 tools:ignore="RtlSymmetry" />
 
             <Button
@@ -168,7 +151,7 @@
                 android:background="@drawable/edittext_border"
                 android:layout_marginTop="5sp"
                 android:text="Select End Date"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="12sp"
                 android:gravity="center"/>
 

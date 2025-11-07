@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId = "com.example.showdown"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -38,12 +38,23 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:5.8.0")
-    implementation("com.mapbox.mapboxsdk:mapbox-android-sdk:10.x.x")
+
+    implementation(libs.mapbox.android.core)
+
+    implementation(libs.place.autocomplete.ndk27)
+    implementation(libs.autofill.ndk27)
+    implementation(libs.mapbox.search.android.ndk27)
+    implementation(libs.mapbox.search.android.ui.ndk27)
+
+    implementation(libs.android)
+    implementation(libs.common)
+
     implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("androidx.room:room-runtime:${roomVersion}")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("androidx.coordinatorlayout:coordinatorlayout:1.2.0")
+
+    implementation("androidx.room:room-runtime:${roomVersion}")
+    implementation(libs.play.services.maps)
     annotationProcessor("androidx.room:room-compiler:${roomVersion}")
     testImplementation(libs.junit)
 

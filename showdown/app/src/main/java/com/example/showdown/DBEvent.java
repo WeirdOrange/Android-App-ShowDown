@@ -21,7 +21,7 @@ import androidx.room.Index;
         },
         indices = {
                 @Index("userId"),
-                @Index("userId")
+                @Index("locationId")
         }
 )
 public class DBEvent {

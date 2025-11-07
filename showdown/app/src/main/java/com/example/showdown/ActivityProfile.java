@@ -84,19 +84,21 @@ public class ActivityProfile extends AppCompatActivity {
                 List<DBEvent> allEvents = db.eventsDao().getAllBlocking();
                 List<EventWithDetails> filtered = new ArrayList<>();
                 for (DBEvent e : allEvents) {
-                    EventWithDetails details = new EventWithDetails();
-                    details.event = e;
+                    if (e.userId == currentUserId) {
+                        EventWithDetails details = new EventWithDetails();
+                        details.event = e;
 
-                    // Organizer
-                    DBUser organizer = db.userDao().getUserById(currentUserId);
-                    details.user = organizer;
+                        // Organizer
+                        DBUser organizer = db.userDao().getUserById(currentUserId);
+                        details.user = organizer;
 
-                    // Tickets
-                    Integer total = db.eventTicketDao().getTotalAvailableTickets(e.id);
-                    int booked = db.bookedTicketDao().getBookedCountByEvent(e.id);
-                    details.availableTickets = (total != null ? total : 0) - booked;
+                        // Tickets
+                        Integer total = db.eventTicketDao().getTotalAvailableTickets(e.id);
+                        int booked = db.bookedTicketDao().getBookedCountByEvent(e.id);
+                        details.availableTickets = (total != null ? total : 0) - booked;
 
-                    filtered.add(details);
+                        filtered.add(details);
+                    }
                 }
                 userEventDetails = filtered;
 

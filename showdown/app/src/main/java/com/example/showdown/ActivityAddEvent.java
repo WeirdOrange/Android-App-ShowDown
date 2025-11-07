@@ -6,23 +6,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,32 +25,22 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import CalendarView.EventRecyclerView;
+import com.mapbox.maps.MapView;
+import com.mapbox.maps.MapboxMap;
+import com.mapbox.search.autofill.AddressAutofill;
+import com.mapbox.search.ui.view.SearchResultsView;
 
-import com.mapbox.api.geocoding.v5.models.CarmenFeature;
-import com.mapbox.search.MapboxSearchSdk;
-import com.mapbox.search.SearchEngine;
-import com.mapbox.search.SearchSuggestionsCallback;
-import com.mapbox.search.SearchSuggestion;
-import com.mapbox.search.offline.OfflineSearchCallback;
-import com.mapbox.search.offline.OfflineSearchResult;
-import com.mapbox.search.result.SearchResultSuggestion;
-import com.mapbox.search.ui.adapter.simple.MapboxSearchAdapter;
-import com.mapbox.search.ui.adapter.simple.MapboxSearchAdapterListener;
-import com.mapbox.geojson.Point;
 import androidx.appcompat.widget.SearchView;
 
 public class ActivityAddEvent extends AppCompatActivity {
     private EditText etTitle, etDescription, etLocation;
     private Button btnSelectStartDate, btnSelectEndDate, btnPublish;
-    private ImageButton ivEventImage, btnCancel;
+    private ImageButton ivEventImage, btnCancel,cvAddTicket;
     private ArrayList<AddTicket.TicketInfo> ticketSlots;
-    private ImageButton cvAddTicket;
     private RecyclerView rvTicketList;
     private TextView tvTicketCount;
 
@@ -71,7 +55,8 @@ public class ActivityAddEvent extends AppCompatActivity {
     private int currentUserId = 1;
     private byte[] selectedImageBytes = null;
 
-    private CarmenFeature selectedFeature;
+    private int selectedLocationId = -1;
+    private String selectedLocationName = "";
     private double selectedLat = 0.0;
     private double selectedLng = 0.0;
 
@@ -101,17 +86,12 @@ public class ActivityAddEvent extends AppCompatActivity {
         setupTicketRecyclerView();
         setupClickListeners();
 
-        MapboxSearchSdk.initialize(
-                this,
-                getString(R.string.mapbox_access_token)
-        );
-        searchEngine = SearchEngine.createSearchEngine();
     }
 
     private void initializeViews() {
         etTitle = findViewById(R.id.et_event_title);
         etDescription = findViewById(R.id.et_event_description);
-        etLocation = findViewById(R.id.et_event_location);
+        etLocation  = findViewById(R.id.et_event_location);
         btnSelectStartDate = findViewById(R.id.btn_select_start_date);
         btnSelectEndDate = findViewById(R.id.btn_select_end_date);
         btnPublish = findViewById(R.id.btn_publish_event);
@@ -121,7 +101,14 @@ public class ActivityAddEvent extends AppCompatActivity {
         rvTicketList = findViewById(R.id.rv_ticket_list);
         tvTicketCount = findViewById(R.id.tv_ticket_count);
 
-        svLocationSearch = findViewById(R.id.sv_location_search);
+        mapView = findViewById(R.id.map);
+        mSearchResultsView = findViewById(R.id.search_results_view);
+
+        mSearchResultsView.initialize(
+                SearchResultsView.Configuration(
+                        commonConfiguration = CommonSearchViewConfiguration(DistanceUnitType.IMPERIAL)
+                )
+        )
     }
 
     private void setupTicketRecyclerView() {
@@ -241,60 +228,21 @@ public class ActivityAddEvent extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void setupLocationSearch() {
-        etLocation.addTextChangedListener(new TextWatcher() {
-            private Handler handler = new Handler(Looper.getMainLooper());
-            private Runnable searchRunnable;
-            private final long DEBOUNCE_MS = 500;
+    private void showLocationSearchDialog() {
+        // Create dialog with location search
+        LocationSearchDialog dialog = new LocationSearchDialog(this, (name, lat, lng) -> {
+            selectedLocationName = name;
+            selectedLat = lat;
+            selectedLng = lng;
 
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            // Update UI
+            etLocation.setText(name);
+            tvSelectedLocation.setText("📍 " + name);
+            tvSelectedLocation.setVisibility(View.VISIBLE);
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (searchRunnable != null) handler.removeCallbacks(searchRunnable);
-
-                String query = s.toString().trim();
-                if (query.length() < 3) {
-                    hideSuggestions();
-                    return;
-                }
-
-                searchRunnable = () -> performGeocodingSearch(query);
-                handler.postDelayed(searchRunnable, DEBOUNCE_MS);
-            }
+            Toast.makeText(this, "Location selected: " + name, Toast.LENGTH_SHORT).show();
         });
-    }
-
-    private void performGeocodingSearch(String query) {
-        MapboxGeocoding client = MapboxGeocoding.builder()
-                .accessToken(getString(R.string.mapbox_access_token))
-                .query(query)
-                .build();
-
-        client.enqueueCall(new Callback<GeocodingResponse>() {
-            @Override
-            public void onResponse(Call<GeocodingResponse> call, Response<GeocodingResponse> response) {
-                List<CarmenFeature> results = response.body().features();
-                if (results == null || results.isEmpty()) {
-                    runOnUiThread(() -> hideSuggestions());
-                    return;
-                }
-
-                runOnUiThread(() -> {
-                    searchAdapter.updateSuggestions(results);
-                    rvLocationSuggestions.setVisibility(View.VISIBLE);
-                });
-            }
-
-            @Override
-            public void onFailure(Call<GeocodingResponse> call, Throwable t) {
-                runOnUiThread(() -> {
-                    Toast.makeText(ActivityAddEvent.this, "Search failed: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                    hideSuggestions();
-                });
-            }
-        });
+        dialog.show();
     }
 
     private void publishEvent() {
@@ -339,18 +287,26 @@ public class ActivityAddEvent extends AppCompatActivity {
             return;
         }
 
-        DBEvent event = new DBEvent();
-        event.title = title;
-        event.description = description;
-        event.location = location;
-        event.startDate = startDateTimestamp;
-        event.endDate = endDateTimestamp;
-        event.publishedDate = System.currentTimeMillis();
-        event.userId = currentUserId;
-        event.image = selectedImageBytes;
-
         executorService.execute(() -> {
             try {
+                DBLocation locationSelected = new DBLocation();
+                locationSelected.name = selectedLocationName.isEmpty() ? location : selectedLocationName;
+                locationSelected.latitude = selectedLat;
+                locationSelected.longitude = selectedLng;
+
+                long locationId = db.locationDao().insert(locationSelected);
+
+                DBEvent event = new DBEvent();
+                event.title = title;
+                event.description = description;
+                event.locationId = (int) locationId;
+                event.startDate = startDateTimestamp;
+                event.endDate = endDateTimestamp;
+                event.publishedDate = System.currentTimeMillis();
+                event.userId = currentUserId;
+                event.image = selectedImageBytes;
+                event.active = true;
+
                 long eventId = db.eventsDao().insert(event);
 
                 // Create All Ticket Slots
@@ -390,6 +346,7 @@ public class ActivityAddEvent extends AppCompatActivity {
         ivEventImage.setOnClickListener(v -> openImagePicker());
 
         cvAddTicket.setOnClickListener(v -> showAddTicketDialog());
+        etLocation.setOnClickListener(v -> showLocationSearchDialog());
     }
 
     @Override
@@ -398,9 +355,9 @@ public class ActivityAddEvent extends AppCompatActivity {
         if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdown();
         }
-        if (searchEngine != null) {
-            searchEngine.cancel();
-        }
-        MapboxSearchSdk.terminate();
+//        if (searchEngine != null) {
+//            searchEngine.cancel();
+//        }
+//        MapboxSearchSdk.terminate();
     }
 }
