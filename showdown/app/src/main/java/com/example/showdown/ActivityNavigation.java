@@ -50,11 +50,11 @@ public class ActivityNavigation {
             if (navbar.getVisibility() == View.VISIBLE) {
                 Log.i(TAG, "trying to close navbar");
                 navbar.setVisibility(View.GONE);
-                overlay.setVisibility(View.VISIBLE);
+//                overlay.setVisibility(View.VISIBLE);
             } else {
                 Log.i(TAG, "opening navbar");
                 navbar.setVisibility(View.VISIBLE);
-                overlay.setVisibility(View.GONE);
+//                overlay.setVisibility(View.GONE);
             }
         } else {
             Log.e(TAG, "An error happened: navbar not found");

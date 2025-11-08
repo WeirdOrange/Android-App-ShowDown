@@ -18,8 +18,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="false"
-            android:layout_marginTop="-40sp"
-            android:layout_marginStart="-18sp"
+            android:layout_marginTop="-100sp"
+            android:layout_marginStart="-10sp"
+            android:layout_marginEnd="-10sp"
+            android:fontFamily="@font/nats_regular"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:padding="0sp"
+            android:text="@string/signup_bg"
+            android:textColor="@color/white_faded"
+            android:textSize="147sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="false"
+            android:layout_marginTop="-160sp"
+            android:layout_marginStart="-10sp"
+            android:layout_marginEnd="-10sp"
             android:fontFamily="@font/nats_regular"
             android:gravity="center"
             android:includeFontPadding="false"
@@ -31,26 +47,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="false"
-            android:layout_marginTop="-120sp"
-            android:layout_marginStart="-18sp"
-            android:fontFamily="@font/nats_regular"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:padding="0sp"
-            android:text="@string/signup_bg"
-            android:textColor="@color/white_faded"
-            android:textSize="149sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:fontFamily="@font/nats_regular"
             android:gravity="center"
             android:includeFontPadding="false"
             android:singleLine="false"
-            android:layout_marginTop="0sp"
-            android:layout_marginStart="-18sp"
+            android:layout_marginTop="220sp"
+            android:layout_marginStart="-10sp"
+            android:layout_marginEnd="-10sp"
             android:padding="0sp"
             android:text="@string/signup_bg"
             android:textColor="@color/white_faded"
@@ -62,8 +65,9 @@
             android:gravity="center"
             android:includeFontPadding="false"
             android:singleLine="false"
-            android:layout_marginTop="-120sp"
-            android:layout_marginStart="-18sp"
+            android:layout_marginTop="-170sp"
+            android:layout_marginStart="-10sp"
+            android:layout_marginEnd="-10sp"
             android:padding="0sp"
             android:text="@string/signup_bg"
             android:textColor="@color/white_faded"
@@ -86,6 +90,7 @@
             android:text="@string/username_tag"
             tools:ignore="RtlSymmetry" />
         <EditText
+            android:id="@+id/username_input"
             android:layout_width="200sp"
             android:layout_height="40sp"
             android:background="@drawable/edittext_border"
@@ -105,6 +110,7 @@
             android:text="@string/email_tag"
             tools:ignore="RtlSymmetry" />
         <EditText
+            android:id="@+id/email_input"
             android:layout_width="200sp"
             android:layout_height="40sp"
             android:background="@drawable/edittext_border"
@@ -124,6 +130,7 @@
             android:text="@string/password_tag"
             tools:ignore="RtlSymmetry" />
         <EditText
+            android:id="@+id/password_input"
             android:layout_width="200sp"
             android:layout_height="40sp"
             android:background="@drawable/edittext_border"
@@ -143,6 +150,7 @@
             android:text="@string/cfm_password_tag"
             tools:ignore="RtlSymmetry" />
         <EditText
+            android:id="@+id/confirm_password_input"
             android:layout_width="200sp"
             android:layout_height="40sp"
             android:background="@drawable/edittext_border"

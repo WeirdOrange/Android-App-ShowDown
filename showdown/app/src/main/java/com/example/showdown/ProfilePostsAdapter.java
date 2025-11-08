@@ -63,7 +63,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
         ImageView eventImage;
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tv_event_title);
+            tvTitle = itemView.findViewById(R.id.post_title);
             tvEventStartDate = itemView.findViewById(R.id.post_start_date);
             tvEventEndDate = itemView.findViewById(R.id.post_end_date);
             eventImage = itemView.findViewById(R.id.iv_post_image);

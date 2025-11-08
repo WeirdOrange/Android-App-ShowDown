@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -43,6 +44,7 @@ public class ActivityMain extends AppCompatActivity {
     private DBUser currentOrganizer;
     private List<EventWithDetails> allUpcomingEvents;
     private ActivityNavigation navHelper;
+    private boolean isDataLoaded = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +60,12 @@ public class ActivityMain extends AppCompatActivity {
         navigation_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("NAV", "Navigation button clicked");
                 navHelper.toggle();
             }
         });
 
         initializeViews();
-        setupCarousel();
-        setupBottomSheet();
 
         // eventID checker if an ID was passed from CalendarView or ProfileView
         Intent intent = getIntent();
@@ -89,10 +90,13 @@ public class ActivityMain extends AppCompatActivity {
         profile_bttn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("PROFILE", "Profile button clicked");
                 Intent intent = new Intent(ActivityMain.this, ActivityProfile.class);
                 startActivity(intent);
             }
         });
+        setupCarousel();
+        setupBottomSheet();
     }
 
     private void initializeViews() {
@@ -183,7 +187,7 @@ public class ActivityMain extends AppCompatActivity {
         btnGetTicket.setText(ticketInfo);
     }
 
-    public void  loadAllUpcomingEvents() {
+    public void loadAllUpcomingEvents() {
         executorService.execute(() -> {
             try {
                 long todayTime = System.currentTimeMillis();
@@ -267,7 +271,6 @@ public class ActivityMain extends AppCompatActivity {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Event not found",
                                 Toast.LENGTH_SHORT).show();
-                        loadAllUpcomingEvents();
                     });
                 }
             } catch (Exception e) {
@@ -285,7 +288,7 @@ public class ActivityMain extends AppCompatActivity {
                 this, LinearLayoutManager.HORIZONTAL, false);
         rvEventCarousel.setLayoutManager(layoutManager);
 
-        carouselAdapter = new EventCarouselAdapter(eventWithDetails -> {
+        carouselAdapter = new EventCarouselAdapter((eventWithDetails) -> {
             displayEventDetails(eventWithDetails);
         });
 
@@ -297,6 +300,9 @@ public class ActivityMain extends AppCompatActivity {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView,newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (allUpcomingEvents == null || allUpcomingEvents.isEmpty()){
+                        return;
+                    }
                     int centerPosition = findCenterItemPosition(layoutManager);
                     if (centerPosition >= 0 && centerPosition < allUpcomingEvents.size()) {
                         carouselAdapter.setActivePosition(centerPosition);

@@ -20,9 +20,10 @@
             android:fontFamily="@font/nats_regular"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:layout_marginTop="-150sp"
+            android:layout_marginTop="-120sp"
             android:padding="0sp"
             android:text="@string/login_bg"
+            android:textStyle="bold"
             android:textColor="@color/white_faded"
             android:textSize="149sp" />
 
@@ -32,10 +33,11 @@
             android:fontFamily="@font/nats_regular"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:layout_marginTop="-150sp"
+            android:layout_marginTop="-160sp"
             android:padding="0sp"
             android:text="@string/login_bg"
             android:textColor="@color/white_faded"
+            android:textStyle="bold"
             android:textSize="149sp" />
         <TextView
             android:layout_width="match_parent"
@@ -47,6 +49,7 @@
             android:padding="0sp"
             android:text="@string/login_bg"
             android:textColor="@color/white_faded"
+            android:textStyle="bold"
             android:textSize="149sp" />
         <TextView
             android:layout_width="match_parent"
@@ -54,20 +57,22 @@
             android:fontFamily="@font/nats_regular"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:layout_marginTop="-120sp"
+            android:layout_marginTop="0sp"
             android:padding="0sp"
             android:text="@string/login_bg"
             android:textColor="@color/white_faded"
+            android:textStyle="bold"
             android:textSize="149sp" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:includeFontPadding="false"
-            android:layout_marginTop="-150sp"
+            android:layout_marginTop="-160sp"
             android:padding="0sp"
             android:text="@string/login_bg"
             android:fontFamily="@font/nats_regular"
+            android:textStyle="bold"
             android:textColor="@color/white_faded"
             android:textSize="149sp" />
     </LinearLayout>
@@ -87,6 +92,7 @@
             android:text="@string/email_tag"
             tools:ignore="RtlSymmetry" />
         <EditText
+            android:id="@+id/email_input"
             android:layout_width="200sp"
             android:layout_height="40sp"
             android:autofillHints="no"
@@ -106,6 +112,7 @@
             android:text="@string/password_tag"
             tools:ignore="RtlSymmetry" />
         <EditText
+            android:id="@+id/password_input"
             android:layout_width="200sp"
             android:layout_height="40sp"
             android:background="@drawable/edittext_border"

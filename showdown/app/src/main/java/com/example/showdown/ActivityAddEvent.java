@@ -29,13 +29,6 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.mapbox.maps.MapView;
-import com.mapbox.maps.MapboxMap;
-import com.mapbox.search.autofill.AddressAutofill;
-import com.mapbox.search.ui.view.SearchResultsView;
-
-import androidx.appcompat.widget.SearchView;
-
 public class ActivityAddEvent extends AppCompatActivity {
     private EditText etTitle, etDescription, etLocation;
     private Button btnSelectStartDate, btnSelectEndDate, btnPublish;
@@ -54,11 +47,6 @@ public class ActivityAddEvent extends AppCompatActivity {
     private long endDateTimestamp = 0;
     private int currentUserId = 1;
     private byte[] selectedImageBytes = null;
-
-    private int selectedLocationId = -1;
-    private String selectedLocationName = "";
-    private double selectedLat = 0.0;
-    private double selectedLng = 0.0;
 
     // Image picker launcher
     private final ActivityResultLauncher<Intent> imagePickerLauncher =
@@ -100,15 +88,6 @@ public class ActivityAddEvent extends AppCompatActivity {
         cvAddTicket = findViewById(R.id.cv_add_ticket);
         rvTicketList = findViewById(R.id.rv_ticket_list);
         tvTicketCount = findViewById(R.id.tv_ticket_count);
-
-        mapView = findViewById(R.id.map);
-        mSearchResultsView = findViewById(R.id.search_results_view);
-
-        mSearchResultsView.initialize(
-                SearchResultsView.Configuration(
-                        commonConfiguration = CommonSearchViewConfiguration(DistanceUnitType.IMPERIAL)
-                )
-        )
     }
 
     private void setupTicketRecyclerView() {
@@ -228,23 +207,6 @@ public class ActivityAddEvent extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void showLocationSearchDialog() {
-        // Create dialog with location search
-        LocationSearchDialog dialog = new LocationSearchDialog(this, (name, lat, lng) -> {
-            selectedLocationName = name;
-            selectedLat = lat;
-            selectedLng = lng;
-
-            // Update UI
-            etLocation.setText(name);
-            tvSelectedLocation.setText("📍 " + name);
-            tvSelectedLocation.setVisibility(View.VISIBLE);
-
-            Toast.makeText(this, "Location selected: " + name, Toast.LENGTH_SHORT).show();
-        });
-        dialog.show();
-    }
-
     private void publishEvent() {
         String title = etTitle.getText().toString().trim();
         String description = etDescription.getText().toString().trim();
@@ -289,17 +251,10 @@ public class ActivityAddEvent extends AppCompatActivity {
 
         executorService.execute(() -> {
             try {
-                DBLocation locationSelected = new DBLocation();
-                locationSelected.name = selectedLocationName.isEmpty() ? location : selectedLocationName;
-                locationSelected.latitude = selectedLat;
-                locationSelected.longitude = selectedLng;
-
-                long locationId = db.locationDao().insert(locationSelected);
-
                 DBEvent event = new DBEvent();
                 event.title = title;
                 event.description = description;
-                event.locationId = (int) locationId;
+                event.location = location;
                 event.startDate = startDateTimestamp;
                 event.endDate = endDateTimestamp;
                 event.publishedDate = System.currentTimeMillis();
@@ -323,6 +278,9 @@ public class ActivityAddEvent extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     Toast.makeText(this, "Event Published Successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ActivityAddEvent.this, ActivityProfile.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                     setResult(RESULT_OK);
                     finish();
                 });
@@ -346,7 +304,6 @@ public class ActivityAddEvent extends AppCompatActivity {
         ivEventImage.setOnClickListener(v -> openImagePicker());
 
         cvAddTicket.setOnClickListener(v -> showAddTicketDialog());
-        etLocation.setOnClickListener(v -> showLocationSearchDialog());
     }
 
     @Override

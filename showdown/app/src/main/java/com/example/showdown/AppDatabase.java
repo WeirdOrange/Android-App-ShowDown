@@ -11,12 +11,11 @@ import com.example.showdown.DBEvent;
 import com.example.showdown.DBEventTickets;
 import com.example.showdown.DBBookedTicket;
 
-@Database(entities = {DBUser.class, DBEvent.class, DBLocation.class, DBEventTickets.class, DBBookedTicket.class}, version = 3, exportSchema = false)
+@Database(entities = {DBUser.class, DBEvent.class, DBEventTickets.class, DBBookedTicket.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract DAOUser userDao();
     public abstract DAOEvent eventsDao();
-    public abstract DAOLocation locationDao();
     public abstract DAOEventTickets eventTicketDao();
     public abstract DAOBookedTicket bookedTicketDao();
     private static volatile AppDatabase INSTANCE;

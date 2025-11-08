@@ -5,18 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@drawable/bg_gradient2">
 
     <include layout="@layout/navbar" />
-    <Button
-        android:id="@+id/toggle_nav_btn"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="top|start"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/menu_icon"
-        />
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,90 +15,68 @@
         >
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="90sp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
+                android:id="@+id/profile_pic2"
                 android:layout_width="match_parent"
-                android:layout_height="180dp"
+                android:layout_height="270dp"
                 android:gravity="center_horizontal"
+                android:background="@drawable/greatestshowmanposter"
                 >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/gradient_fade_mask3"/>
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="vertical"
+                    android:paddingTop="90sp"
                     android:layout_marginTop="30sp"
+                    android:layout_marginStart="20sp"
                     >
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/username"
+                        android:layout_width="200dp"
                         android:layout_height="wrap_content"
-                        android:textSize="12dp"
-                        android:text="Inti International College Penang "/>
+                        android:text="Inti International College Penang "
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:lineHeight="20sp"
+                        android:layout_gravity="bottom"
+                        android:fontFamily="@font/nats_regular"
+                        android:textColor="@android:color/black"
+                        />
                     <TextView
+                        android:id="@+id/user_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="8dp"
-                        android:text="ID: 423200010392"/>
+                        android:text="ID: 423200010392"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:lineHeight="20sp"
+                        android:fontFamily="@font/nats_regular"
+                        android:textColor="@android:color/black"
+                        />
                 </LinearLayout>
                 <ImageView
+                    android:id="@+id/profile_pic"
                     android:layout_width="160dp"
                     android:layout_height="160dp"
-                    android:layout_marginStart="20sp"
+                    android:layout_marginEnd="20sp"
+                    android:layout_marginTop="90sp"
+                    android:layout_gravity="end"
                     android:background="@drawable/circle_dark"/>
-            </LinearLayout>
+            </FrameLayout>
 
-            <GridLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:rowCount="2"
-                android:columnCount="3"
-                android:layout_marginTop="-25sp"
-                android:layout_marginStart="25dp"
-                >
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="8dp"
-                    android:text="Following"
-                    android:gravity="center"/>
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="8dp"
-                    android:text="Followers"
-                    android:gravity="center"/>
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="8dp"
-                    android:text="Likes"
-                    android:gravity="center"/>
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="8dp"
-                    android:text="0"
-                    android:gravity="center"/>
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="8dp"
-                    android:text="0"
-                    android:gravity="center"/>
-                <TextView
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="8dp"
-                    android:text="1"
-                    android:gravity="center"/>
-            </GridLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="40dp"
                 android:paddingTop="5sp"
                 android:paddingBottom="5sp"
+                android:gravity="center_vertical"
                 android:paddingLeft="10sp"
                 android:background="@color/secondary_light"
                 >
@@ -121,32 +90,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="40sp"
                     android:textColor="@color/white"
                     android:textSize="16dp"
                     android:text="History"
                     />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:paddingTop="5sp"
-                android:paddingBottom="5sp"
-                android:paddingStart="10sp"
-                android:background="@color/secondary_light"
-                >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="30sp"
                     android:textColor="@color/white"
-                    android:textSize="12dp"
-                    android:text="Public"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12dp"
-                    android:text="Private"
+                    android:textSize="16dp"
+                    android:text="Bookings"
                     />
             </LinearLayout>
 
@@ -161,11 +115,14 @@
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv_add_event"
                     android:layout_width="160dp"
-                    android:layout_height="220dp"
+                    android:layout_height="240dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp"
                     app:cardBackgroundColor="@color/gray"
-                    android:layout_margin="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     >
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -197,4 +154,14 @@
             </GridLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/toggle_nav_btn"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/menu_icon"
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

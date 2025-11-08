@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,11 +25,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ActivityProfile extends AppCompatActivity {
-
     private CardView cvAddEvent;
     private RecyclerView rvUserPosts;
     private ProfilePostsAdapter postsAdapter;
     private Button navigation_bttn;
+    private FrameLayout profile2;
+    private TextView userID, username;
+    private ImageView profile1;
 
     private AppDatabase db;
     private ExecutorService executorService;
@@ -44,6 +50,7 @@ public class ActivityProfile extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        Log.d("PROFILE", "Profile Page loading");
 
         db = AppDatabase.getInstance(this);
         executorService = Executors.newSingleThreadExecutor();
@@ -55,21 +62,31 @@ public class ActivityProfile extends AppCompatActivity {
         initializeViews();
         setupAddEventCard();
         loadUserEventsWithDetails();
+        Log.d("PROFILE", "Profile Page finished loading");
     }
 
     private void initializeViews() {
+        profile2 = findViewById(R.id.profile_pic2);
+        profile1 = findViewById(R.id.profile_pic);
+        username = findViewById(R.id.username);
+        userID = findViewById(R.id.user_id);
+
         cvAddEvent = findViewById(R.id.cv_add_event);
         rvUserPosts = findViewById(R.id.rv_user_posts);
 
         postsAdapter = new ProfilePostsAdapter(event -> {
             Intent intent = new Intent(this, ActivityMain.class);
             intent.putExtra("Event_ID", event.event.id);
-//            startActivity(intent);
+            startActivity(intent);
         });
 
         rvUserPosts.setLayoutManager(new GridLayoutManager(this, 2));
         rvUserPosts.setAdapter(postsAdapter);
     }
+
+//    private void setupUserDetails(int userId) {
+//        List<DBUser> user = new db.userDao().getUserById()
+//    }
 
     private void setupAddEventCard() {
         cvAddEvent.setOnClickListener(v -> {
