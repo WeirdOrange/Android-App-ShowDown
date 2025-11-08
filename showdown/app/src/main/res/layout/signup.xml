@@ -99,7 +99,7 @@
             android:paddingStart="8sp"
             android:hint="@string/username_hint"
             android:fontFamily="@font/nats_regular"
-            android:textColor="@color/white_faded"
+            android:textColor="@color/black"
             android:textSize="12sp"
             android:inputType="text"
             tools:ignore="RtlSymmetry" />
@@ -119,7 +119,7 @@
             android:paddingStart="8sp"
             android:hint="@string/email_hint"
             android:fontFamily="@font/nats_regular"
-            android:textColor="@color/white_faded"
+            android:textColor="@color/black"
             android:textSize="12sp"
             android:inputType="text"
             tools:ignore="RtlSymmetry" />
@@ -139,7 +139,7 @@
             android:paddingStart="8sp"
             android:hint="@string/password_hint"
             android:fontFamily="@font/nats_regular"
-            android:textColor="@color/white_faded"
+            android:textColor="@color/black"
             android:textSize="12sp"
             android:inputType="textPassword"
             tools:ignore="RtlSymmetry"/>
@@ -159,9 +159,9 @@
             android:paddingStart="8sp"
             android:hint="@string/cfm_password_hint"
             android:fontFamily="@font/nats_regular"
-            android:textColor="@color/white_faded"
+            android:textColor="@color/black"
             android:textSize="12sp"
-            android:inputType="text"
+            android:inputType="textPassword"
             tools:ignore="RtlSymmetry" />
 
         <Button

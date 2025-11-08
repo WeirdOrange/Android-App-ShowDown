@@ -1,40 +1,42 @@
 [versions]
 agp = "8.11.2"
-android = "11.15.0"
-androidVersion = "3.16.0"
-common = "24.7.1"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 appcompat = "1.7.1"
-mapboxAndroidCore = "3.1.0"
-mapboxSearchAndroidNdk27 = "2.16.2"
 material = "1.13.0"
 activity = "1.11.0"
 constraintlayout = "2.2.1"
-roomCommonJvm = "2.8.3"
-roomRuntimeAndroid = "2.8.3"
+room = "2.6.1"
 playServicesMaps = "19.2.0"
+gifDrawable = "1.2.29"
+circleImageView = "3.1.0"
+recyclerview = "1.3.1"
+coordinatorlayout = "1.2.0"
+androidMail = "1.6.7"
 
 [libraries]
-android = { module = "com.mapbox.maps:android", version.ref = "android" }
-autofill-ndk27 = { module = "com.mapbox.search:autofill-ndk27", version.ref = "mapboxSearchAndroidNdk27" }
-common = { module = "com.mapbox.common:common", version.ref = "common" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-mapbox-android-core = { module = "com.mapbox.mapboxsdk:mapbox-android-core", version.ref = "mapboxAndroidCore" }
-mapbox-search-android-ndk27 = { module = "com.mapbox.search:mapbox-search-android-ndk27", version.ref = "mapboxSearchAndroidNdk27" }
-mapbox-search-android-ui-ndk27 = { module = "com.mapbox.search:mapbox-search-android-ui-ndk27", version.ref = "mapboxSearchAndroidNdk27" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
-navigation-android = { module = "com.mapbox.navigation:android", version.ref = "androidVersion" }
-place-autocomplete-ndk27 = { module = "com.mapbox.search:place-autocomplete-ndk27", version.ref = "mapboxSearchAndroidNdk27" }
-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
-room-runtime-android = { group = "androidx.room", name = "room-runtime-android", version.ref = "roomRuntimeAndroid" }
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
+
+# Room
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+# Other dependencies from your build.gradle
+gif-drawable = { group = "pl.droidsonroids.gif", name = "android-gif-drawable", version.ref = "gifDrawable" }
+annotations = { group = "org.jetbrains", name = "annotations", version = "23.0.0" }
+circle-imageview = { group = "de.hdodenhof", name = "circleimageview", version.ref = "circleImageView" }
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
+coordinatorlayout = { group = "androidx.coordinatorlayout", name = "coordinatorlayout", version.ref = "coordinatorlayout" }
+android-mail = { group = "com.sun.mail", name = "android-mail", version.ref = "androidMail" }
+android-activation = { group = "com.sun.mail", name = "android-activation", version.ref = "androidMail" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
