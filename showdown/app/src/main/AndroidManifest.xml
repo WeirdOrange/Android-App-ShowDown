@@ -30,6 +30,9 @@
             android:name=".ActivityMain"
             android:exported="false" />
         <activity
+            android:name=".ActivitySetting"
+            android:exported="false" />
+        <activity
             android:name=".ActivitySignup"
             android:exported="false" />
         <activity

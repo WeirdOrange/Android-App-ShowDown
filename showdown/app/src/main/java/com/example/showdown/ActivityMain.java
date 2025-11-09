@@ -80,7 +80,7 @@ public class ActivityMain extends AppCompatActivity {
             if (currentEvent != null) {
                 Toast.makeText(this, "Booking tickets for: " + currentEvent.title,
                         Toast.LENGTH_SHORT).show();
-                // TODO: Navigate to ticket booking activity (show mapbox)
+                // TODO: Navigate to ticket booking activity
             } else {
                 Toast.makeText(this, "No event selected",
                         Toast.LENGTH_SHORT).show();

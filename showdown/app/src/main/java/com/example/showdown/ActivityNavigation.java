@@ -40,7 +40,7 @@ public class ActivityNavigation {
     private void setupNavigation() {
         mainButton.setOnClickListener(v -> navigateTo(ActivityMain.class));
         calendarButton.setOnClickListener(v -> navigateTo(ActivityCalendar.class));
-        settingButton.setOnClickListener(v -> navigateTo(ActivityProfile.class));
+        settingButton.setOnClickListener(v -> navigateTo(ActivitySetting.class));
         toggle_closenav_btn.setOnClickListener(v -> toggle());
     }
 

@@ -83,11 +83,11 @@ public class ActivitySignup extends AppCompatActivity {
                 String otp = OTPDialog.generateOTP();
                 OTPDialog.saveOTP(this, email, otp);
 
-                // Send OTP via email (you'll need to implement this)
+                // Send OTP via email
                 OTPDialog.sendOTPEmail(email, otp);
 
                 // Create new user
-                DBUser newUser = new DBUser(username, email, password, "");
+                DBUser newUser = new DBUser(username, email, password,"");
                 long userId = db.userDao().insert(newUser);
 
                 if (userId > 0) {

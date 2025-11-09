@@ -58,7 +58,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
     }
 
     static class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvDescription, tvEventStartDate, tvEventEndDate, tvLocation, tvAvailableTickets, tvPostedOn;
+        TextView tvTitle, tvEventStartDate, tvEventEndDate, tvLocation, tvAvailableTickets, tvPostedOn;
         Button btnBook;
         ImageView eventImage;
         public EventViewHolder(@NonNull View itemView) {
@@ -80,7 +80,7 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
         String publishedOn = mDateFormat.format(new Date(event.publishedDate));
 
         holder.tvTitle.setText(event.title);
-        holder.tvEventEndDate.setText(startDate);
+        holder.tvEventStartDate.setText(startDate);
         holder.tvEventEndDate.setText(endDate);
         holder.tvPostedOn.setText("Posted On: " + publishedOn);
 

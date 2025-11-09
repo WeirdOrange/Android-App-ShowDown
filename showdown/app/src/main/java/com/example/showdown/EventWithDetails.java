@@ -13,8 +13,8 @@ public class EventWithDetails {
     public DBUser user;
     // Available tickets calculation will be done separately
     public int availableTickets;
-
     public EventWithDetails() {
         this.availableTickets = 0;
     }
+    public long datetime;
 }

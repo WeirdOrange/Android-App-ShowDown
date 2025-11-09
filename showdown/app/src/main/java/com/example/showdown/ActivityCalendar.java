@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -40,10 +41,8 @@ import CalendarView.CalendarView;
 import CalendarView.EventRecyclerView;
 
 public class ActivityCalendar extends AppCompatActivity {
-    private Button mainButton, profileButton;
     private CalendarView calendarView;
     private TextView tvSelectedDate, tvEventsTitleDay, tvEventsTitleMonth;
-    private ImageView ivEventImage;
     private LocalDate today;
     private TextView tvNoEvents;
     private RecyclerView rvEvents;
@@ -73,6 +72,15 @@ public class ActivityCalendar extends AppCompatActivity {
         setupBottomSheet();
         setupRecyclerView();
         setupCalendar();
+
+        findViewById(R.id.profile_bttn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("PROFILE", "Profile button clicked");
+                Intent intent = new Intent(ActivityCalendar.this, ActivityProfile.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initializeViews() {
@@ -82,7 +90,6 @@ public class ActivityCalendar extends AppCompatActivity {
         tvEventsTitleMonth = findViewById(R.id.tv_events_title_month);
         tvNoEvents = findViewById(R.id.tv_no_events);
         rvEvents = findViewById(R.id.rv_events);
-        ivEventImage = findViewById(R.id.card_bg_image);
     }
 
     private void setupBottomSheet() {
@@ -155,40 +162,49 @@ public class ActivityCalendar extends AppCompatActivity {
     private void loadEventsFromDatabase(long selectedDate, String displayDate) {
         executorService.execute(() -> {
             try {
-                // Get events for the selected date
-                List<DBEvent> events = db.eventsDao().getEventsByDate(selectedDate);
-                // Build EventWithDetails objects
+                // Get event ticket for that day
+                List<DBEventTickets> tickets = db.eventTicketDao().getTicketsByDate(selectedDate);
                 List<EventWithDetails> eventDetailsList = new ArrayList<>();
 
-                for (DBEvent event : events) {
-                    EventWithDetails details = new EventWithDetails();
-                    details.event = event;
+                if (!tickets.isEmpty()) {
+                    for (DBEventTickets ticket : tickets) {
+                        // Get events for the selected date
+                        List<DBEvent> events = db.eventsDao().getEventsByDate(selectedDate);
+                        for (DBEvent event : events) {
+                            if (event.id == ticket.eventsID) {
+                                EventWithDetails details = new EventWithDetails();
+                                details.event = event;
 
-                    // Get user information
-                    List<DBUser> users = db.userDao().getAllBlocking();
-                    for (DBUser user : users) {
-                        if (user.id == event.userId) {
-                            details.user = user;
-                            break;
+                                // Get user information
+                                List<DBUser> users = db.userDao().getAllBlocking();
+                                for (DBUser user : users) {
+                                    if (user.id == event.userId) {
+                                        details.user = user;
+                                        break;
+                                    }
+                                }
+
+                                details.datetime = ticket.ticketDateTime;
+
+                                // Calculate available tickets
+                                Integer totalTickets = db.eventTicketDao().getTotalAvailableTickets(event.id);
+                                int bookedTickets = db.bookedTicketDao().getBookedCountByEvent(event.id);
+
+                                if (totalTickets != null) {
+                                    details.availableTickets = totalTickets - bookedTickets;
+                                } else {
+                                    details.availableTickets = 0;
+                                }
+
+                                eventDetailsList.add(details);
+                                Log.d("Event Cards", "booking added");
+                            } else {
+                                Log.d("Event Cards", "this event does not have bookings available today");
+                            }
                         }
                     }
-
-                    // Calculate available tickets
-                    Integer totalTickets = db.eventTicketDao().getTotalAvailableTickets(event.id);
-                    int bookedTickets = db.bookedTicketDao().getBookedCountByEvent(event.id);
-
-                    if (totalTickets != null) {
-                        details.availableTickets = totalTickets - bookedTickets;
-                    } else {
-                        details.availableTickets = 0;
-                    }
-
-                    if (event.image != null && event.image.length > 0) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(details.event.image, 0, event.image.length);
-                        ivEventImage.setImageBitmap(bitmap);
-                    }
-
-                    eventDetailsList.add(details);
+                } else {
+                    Log.d("Event Cards", "No events happening today");
                 }
 
                 // Update UI on main thread
@@ -201,14 +217,14 @@ public class ActivityCalendar extends AppCompatActivity {
                     } else {
                         tvNoEvents.setVisibility(View.GONE);
                         rvEvents.setVisibility(View.VISIBLE);
-                        tvEventsTitleDay.setText("Events on " + displayDate);
+                        tvEventsTitleDay.setText(displayDate.split(" ")[1]);
+                        tvEventsTitleMonth.setText(displayDate.split(" ")[0] + ", " + displayDate.split(" ")[2]);
                         eventAdapter.setEvents(eventDetailsList);
 
                         // Expand bottom sheet to show events
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     }
                 });
-
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() ->

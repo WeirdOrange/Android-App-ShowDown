@@ -27,6 +27,9 @@ public interface DAOBookedTicket {
     @Query("SELECT * FROM bookedtickets")
     List<DBBookedTicket> getAllBlocking();
 
+    @Query("SELECT * FROM bookedtickets WHERE userId = :userId")
+    List<DBBookedTicket> getBookingsByUser(int userId);
+
     // Count booked tickets for a specific ticket type
     @Query("SELECT COUNT(*) FROM bookedtickets WHERE ticketsId = :ticketId")
     int getBookedCount(int ticketId);
@@ -36,4 +39,10 @@ public interface DAOBookedTicket {
             "INNER JOIN tickets t ON bt.ticketsId = t.id " +
             "WHERE t.eventsID = :eventId")
     int getBookedCountByEvent(int eventId);
+
+    // get event id from user bookings
+    @Query("SELECT DISTINCT t.eventsID FROM bookedtickets bt " +
+            "INNER JOIN tickets t ON bt.ticketsId = t.id " +
+            "WHERE bt.userId = :userId")
+    List<Integer> getBookedEventIds(int userId);
 }

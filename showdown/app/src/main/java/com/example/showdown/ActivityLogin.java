@@ -35,7 +35,6 @@ public class ActivityLogin extends AppCompatActivity {
             navigateToMain();
             return;
         }
-        createDummyUser();
 
         emailInput = findViewById(R.id.email_input);
         passwordInput = findViewById(R.id.password_input);
@@ -109,26 +108,4 @@ public class ActivityLogin extends AppCompatActivity {
         finish();
     }
 
-    private void createDummyUser() {
-        executorService.execute(() -> {
-            try {
-                List<DBUser> users = db.userDao().getAllBlocking();
-                if (users.isEmpty()) {
-                    // Create dummy user
-                    DBUser dummyUser = new DBUser(
-                            "Ivan Lai",              // name
-                            "p23015609@student.newinti.edu.my",  // email
-                            "password123",           // password
-                            "+60164075284"           // phone
-                    );
-                    db.userDao().insert(dummyUser);
-                    runOnUiThread(() ->
-                            Toast.makeText(this, "Dummy user created", Toast.LENGTH_SHORT).show()
-                    );
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
 }

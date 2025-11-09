@@ -1,5 +1,7 @@
 package CalendarView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +27,7 @@ import java.util.Locale;
 public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.EventViewHolder> {
     private List<EventWithDetails> events;
     private OnEventClickListener listener;
-    private SimpleDateFormat mDateFormat;
+    private SimpleDateFormat mDateFormat, mTimeFormat;
 
     public interface OnEventClickListener {
         void onBookClick(EventWithDetails event);
@@ -35,6 +37,7 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
         this.events = new ArrayList<>();
         this.listener = listener;
         this.mDateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        this.mTimeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     }
     public void setEvents(List<EventWithDetails> events) {
         this.events = events;
@@ -55,7 +58,7 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
     }
 
     static class EventViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvDescription, tvEventDate, tvLocation, tvAvailableTickets;
+        TextView tvTitle, tvDescription, tvEventDate, tvEventTime, tvLocation, tvAvailableTickets;
         ImageView tvCardImage;
         Button btnBook;
 
@@ -64,6 +67,7 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
             tvTitle = itemView.findViewById(R.id.tv_event_title);
             tvDescription = itemView.findViewById(R.id.tv_event_description);
             tvEventDate = itemView.findViewById(R.id.tv_event_date);
+            tvEventTime = itemView.findViewById(R.id.tv_event_time);
             tvLocation = itemView.findViewById(R.id.tv_event_location);
             tvCardImage = itemView.findViewById(R.id.card_bg_image);
             tvAvailableTickets = itemView.findViewById(R.id.tv_available_tickets);
@@ -80,7 +84,8 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
         holder.tvTitle.setText(event.title);
         holder.tvDescription.setText(event.description);
         holder.tvLocation.setText(event.location);
-        holder.tvEventDate.setText(sdf.format(event.startDate));
+        holder.tvEventDate.setText(mDateFormat.format(eventDetails.datetime));
+        holder.tvEventTime.setText(mTimeFormat.format(eventDetails.datetime));
 
         int available = eventDetails.availableTickets;
         if (available > 0){
@@ -95,6 +100,11 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
                     ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_red_dark)
             );
             holder.btnBook.setEnabled(false);
+        }
+
+        if (event.image != null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(event.image, 0, event.image.length);
+            holder.tvCardImage.setImageBitmap(bmp);
         }
 
         holder.btnBook.setOnClickListener(v -> {

@@ -48,7 +48,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="120dp"
                 android:elevation="12dp"
-                android:id="@+id/profile1"
                 app:cardCornerRadius="180dp"
                 android:layout_centerHorizontal="true"
                 app:cardBackgroundColor="@color/white"
@@ -57,9 +56,10 @@
                 android:shape="ring"
                 android:thicknessRatio="1.9">
                 <ImageButton
+                    android:id="@+id/profile1"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
-                    android:src="@drawable/picture"
+                    android:src="@android:drawable/ic_menu_camera"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
                     android:background="@drawable/circle_dark"/>
@@ -71,6 +71,20 @@
                 android:orientation="vertical"
                 android:gravity="center|top"
                 >
+                <Button
+                    android:id="@+id/btn_toggle_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Edit Profile"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/nats_regular"
+                    android:backgroundTint="@color/primary_light"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:elevation="4dp"
+                    />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -80,6 +94,7 @@
                     android:fontFamily="@font/nats_regular"
                     />
                 <EditText
+                    android:id="@+id/et_username"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
                     android:text="Inti International College Penang"
@@ -98,9 +113,10 @@
                 android:fontFamily="@font/nats_regular"
                 />
                 <EditText
+                    android:id="@+id/et_email"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
-                    android:text="Inti International College Penang"
+                    android:text="abcd@gmail.com"
                     android:textStyle="bold"
                     android:gravity="center"
                     android:fontFamily="@font/nats_regular"
@@ -116,6 +132,7 @@
                     android:fontFamily="@font/nats_regular"
                     />
                 <EditText
+                    android:id="@+id/et_phone_number"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
                     android:text="+60164075284"
@@ -126,32 +143,57 @@
                     android:textSize="20sp"
                     android:padding="12dp"/>
 
-                <LinearLayout
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="App Theme:"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/nats_regular"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <RadioGroup
+                    android:id="@+id/rg_theme"
                     android:layout_width="320dp"
-                    android:layout_height="70dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:background="@color/white"
-                    >
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:padding="8dp">
+
+                    <RadioButton
+                        android:id="@+id/rb_system"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Light Mode"
-                        android:textSize="20sp"
+                        android:text="System"
+                        android:textSize="14sp"
                         android:fontFamily="@font/nats_regular"
-                        android:background="@drawable/square_bttn"
-                        />
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:padding="8dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_light"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Dark Mode"
-                        android:textSize="20sp"
+                        android:text="Light"
+                        android:textSize="14sp"
                         android:fontFamily="@font/nats_regular"
-                        android:background="@drawable/square_bttn"
-                        />
-                </LinearLayout>
+                        android:padding="8dp"/>
+
+                    <RadioButton
+                        android:id="@+id/rb_dark"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dark"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/nats_regular"
+                        android:padding="8dp"/>
+                </RadioGroup>
                 <Button
+                    android:id="@+id/btn_logout"
                     android:layout_width="320dp"
                     android:layout_height="70dp"
                     android:layout_marginTop="50dp"

@@ -89,7 +89,7 @@
         android:layout_gravity="end|bottom"
         android:gravity="end"
         android:textSize="8sp"
-        android:textColor="@android:color/darker_gray"
+        android:textColor="@android:color/white"
         android:fontFamily="@font/roboto_semicondensed_italic"
         android:paddingEnd="8dp"
         />

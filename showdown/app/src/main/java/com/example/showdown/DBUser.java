@@ -12,11 +12,15 @@ public class DBUser {
     public String email;
     public String phoneNumber;
     public String password;
+    public byte[] profile;
+    public byte[] backgroundProfile;
 
     public DBUser(String name, String email, String password, String phoneNumber) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
+        this.profile = null;
+        this.backgroundProfile = null;
     }
 }

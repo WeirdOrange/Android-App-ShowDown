@@ -74,33 +74,36 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:paddingTop="5sp"
-                android:paddingBottom="5sp"
                 android:gravity="center_vertical"
                 android:paddingLeft="10sp"
                 android:background="@color/secondary_light"
                 >
-                <TextView
+                <Button
+                    android:id="@+id/bttnPost"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="40sp"
                     android:textSize="16dp"
                     android:text="Posts"
+                    android:backgroundTint="@color/primary_light"
+                    android:background="@color/black"
                     />
-                <TextView
+                <Button
+                    android:id="@+id/bttnHistory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="40sp"
                     android:textColor="@color/white"
                     android:textSize="16dp"
                     android:text="History"
+                    android:backgroundTint="@color/secondary_light"
                     />
-                <TextView
+                <Button
+                    android:id="@+id/bttnBookings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textSize="16dp"
-                    android:text="Bookings"
+                    android:text="MyBookings"
+                    android:backgroundTint="@color/secondary_light"
                     />
             </LinearLayout>
 
