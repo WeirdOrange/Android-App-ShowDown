@@ -33,6 +33,12 @@
             android:name=".ActivitySetting"
             android:exported="false" />
         <activity
+            android:name=".ActivityOwnerEventDetail"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityOTPVerification"
+            android:exported="false" />
+        <activity
             android:name=".ActivitySignup"
             android:exported="false" />
         <activity

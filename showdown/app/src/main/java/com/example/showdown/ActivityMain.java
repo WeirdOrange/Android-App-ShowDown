@@ -1,8 +1,10 @@
 package com.example.showdown;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +41,8 @@ public class ActivityMain extends AppCompatActivity {
     private AppDatabase db;
     private ExecutorService executorService;
     private SimpleDateFormat dateFormat;
+    private SharedPreferences sharedPreferences;
+    private int currentUserId = -1;
     private int currentEventId = -1;
     private DBEvent currentEvent;
     private DBUser currentOrganizer;
@@ -54,6 +58,10 @@ public class ActivityMain extends AppCompatActivity {
         db = AppDatabase.getInstance(this);
         executorService = Executors.newSingleThreadExecutor();
         dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        sharedPreferences = getSharedPreferences("ShowdownPrefs", MODE_PRIVATE);
+
+        // Get current user ID
+        currentUserId = sharedPreferences.getInt("userId", -1);
 
         navHelper = new ActivityNavigation(this);
         navigation_bttn = findViewById(R.id.toggle_nav_btn);
@@ -66,6 +74,8 @@ public class ActivityMain extends AppCompatActivity {
         });
 
         initializeViews();
+        setupBottomSheet();
+        setupCarousel();
 
         // eventID checker if an ID was passed from CalendarView or ProfileView
         Intent intent = getIntent();
@@ -78,9 +88,21 @@ public class ActivityMain extends AppCompatActivity {
 
         btnGetTicket.setOnClickListener(v -> {
             if (currentEvent != null) {
-                Toast.makeText(this, "Booking tickets for: " + currentEvent.title,
-                        Toast.LENGTH_SHORT).show();
-                // TODO: Navigate to ticket booking activity
+                // Open ticket booking dialog
+                BookTicketDialog dialog = new BookTicketDialog(
+                        ActivityMain.this,
+                        currentEvent,
+                        currentUserId,
+                        () -> {
+                            // Refresh event details after booking
+                            if (currentEventId != -1) {
+                                loadSpecifiedEvent(currentEventId);
+                            } else {
+                                loadAllUpcomingEvents();
+                            }
+                        }
+                );
+                dialog.show();
             } else {
                 Toast.makeText(this, "No event selected",
                         Toast.LENGTH_SHORT).show();
@@ -95,8 +117,6 @@ public class ActivityMain extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        setupCarousel();
-        setupBottomSheet();
     }
 
     private void initializeViews() {
@@ -122,12 +142,12 @@ public class ActivityMain extends AppCompatActivity {
     private void setupBottomSheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-
         bottomSheetBehavior.setPeekHeight(0);
 
         btnCloseSheet.setOnClickListener(v ->
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
         );
+
         btnInfo.setOnClickListener(v -> {
             if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -165,23 +185,31 @@ public class ActivityMain extends AppCompatActivity {
             tvEventOrganizer.setText("By " + currentOrganizer.name);
             tvEventContact.setText(currentOrganizer.phoneNumber);
 
-            btnWhatsapp.setOnClickListener(V -> {
+            btnWhatsapp.setOnClickListener(v -> {
                 String message = "Hi, I'm interested in the event: " + currentEvent.title;
                 String phoneNumber = currentOrganizer.phoneNumber.replaceAll("[^0-9]", "");
 
                 try {
+                    // Add country code if not present
+                    if (!phoneNumber.startsWith("60")) {
+                        phoneNumber = "60" + phoneNumber;
+                    }
+
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(android.net.Uri.parse(
-                            "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + message
+                    intent.setData(Uri.parse(
+                            "https://api.whatsapp.com/send?phone=" + phoneNumber + "&text=" + Uri.encode(message)
                     ));
+                    startActivity(intent); // THIS WAS MISSING!
                 } catch (Exception e) {
-                    Toast.makeText(this, "WhatsApp not installed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "WhatsApp not installed or error: " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
             tvEventOrganizer.setText("By Unknown");
             tvEventContact.setText("N/A");
         }
+
         // Display ticket availability
         String ticketInfo = eventWithDetails.availableTickets + " tickets available";
         btnGetTicket.setText(ticketInfo);

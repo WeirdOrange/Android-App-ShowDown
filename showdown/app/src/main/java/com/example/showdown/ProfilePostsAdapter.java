@@ -1,5 +1,6 @@
 package com.example.showdown;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -88,6 +89,10 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
             Bitmap bmp = BitmapFactory.decodeByteArray(event.image, 0, event.image.length);
             holder.eventImage.setImageBitmap(bmp);
         }
-        holder.itemView.setOnClickListener(v -> listener.onBookClick(eventDetails));
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), ActivityOwnerEventDetail.class);
+            intent.putExtra("Event_ID", event.id);
+            v.getContext().startActivity(intent);
+        });
     }
 }

@@ -26,7 +26,6 @@ public class ActivityNavigation {
         initializeViews();
         setupNavigation();
         setupOutsideClickListener();
-
     }
 
     private void initializeViews() {

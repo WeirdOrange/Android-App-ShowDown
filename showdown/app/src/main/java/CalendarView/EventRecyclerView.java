@@ -1,5 +1,7 @@
 package CalendarView;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -13,13 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.showdown.ActivityMain;
 import com.example.showdown.DBEvent;
 import com.example.showdown.EventWithDetails;
 import com.example.showdown.R;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -39,6 +40,7 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
         this.mDateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
         this.mTimeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
     }
+
     public void setEvents(List<EventWithDetails> events) {
         this.events = events;
         notifyDataSetChanged();
@@ -60,7 +62,7 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
     static class EventViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle, tvDescription, tvEventDate, tvEventTime, tvLocation, tvAvailableTickets;
         ImageView tvCardImage;
-        Button btnBook;
+        Button btnBook, btnKnowMore;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -71,7 +73,7 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
             tvLocation = itemView.findViewById(R.id.tv_event_location);
             tvCardImage = itemView.findViewById(R.id.card_bg_image);
             tvAvailableTickets = itemView.findViewById(R.id.tv_available_tickets);
-            btnBook = itemView.findViewById(R.id.btn_book_ticket);
+            btnKnowMore = itemView.findViewById(R.id.btn_know_more);
         }
     }
 
@@ -79,7 +81,7 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
     public void onBindViewHolder(@NonNull EventViewHolder holder, int position) {
         EventWithDetails eventDetails = events.get(position);
         DBEvent event = eventDetails.event;
-        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
+        Context context = holder.itemView.getContext();
 
         holder.tvTitle.setText(event.title);
         holder.tvDescription.setText(event.description);
@@ -91,15 +93,15 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
         if (available > 0){
             holder.tvAvailableTickets.setText(available + " tickets available");
             holder.tvAvailableTickets.setTextColor(
-                    ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_green_dark)
+                    ContextCompat.getColor(context, android.R.color.holo_green_dark)
             );
-            holder.btnBook.setEnabled(true);
+            holder.btnKnowMore.setEnabled(true);
         } else {
             holder.tvAvailableTickets.setText("Sold out");
             holder.tvAvailableTickets.setTextColor(
-                    ContextCompat.getColor(holder.itemView.getContext(), android.R.color.holo_red_dark)
+                    ContextCompat.getColor(context, android.R.color.holo_red_dark)
             );
-            holder.btnBook.setEnabled(false);
+            holder.btnKnowMore.setEnabled(false);
         }
 
         if (event.image != null) {
@@ -107,11 +109,11 @@ public class EventRecyclerView extends RecyclerView.Adapter<EventRecyclerView.Ev
             holder.tvCardImage.setImageBitmap(bmp);
         }
 
-        holder.btnBook.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onBookClick(eventDetails);
-            }
+        // Navigate to ActivityMain with event ID
+        holder.btnKnowMore.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ActivityMain.class);
+            intent.putExtra("Event_ID", event.id);
+            context.startActivity(intent);
         });
-
     }
 }

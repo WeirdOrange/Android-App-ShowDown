@@ -2,6 +2,7 @@ package com.example.showdown;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,22 +87,17 @@ public class ActivitySignup extends AppCompatActivity {
                 // Send OTP via email
                 OTPDialog.sendOTPEmail(email, otp);
 
-                // Create new user
-                DBUser newUser = new DBUser(username, email, password,"");
-                long userId = db.userDao().insert(newUser);
-
-                if (userId > 0) {
-                    runOnUiThread(() -> {
-                        Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(ActivitySignup.this, ActivityLogin.class);
-                        startActivity(intent);
-                        finish();
-                    });
-                } else {
-                    runOnUiThread(() ->
-                            Toast.makeText(this, "Registration failed. Please try again.", Toast.LENGTH_SHORT).show()
-                    );
-                }
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Redirecting to OTP Verification...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ActivitySignup.this, ActivityOTPVerification.class);
+                    intent.putExtra("username",username);
+                    intent.putExtra("email",email);
+                    intent.putExtra("password",password);
+                    intent.putExtra("phoneNumber","");
+                    startActivity(intent);
+                    Log.i("Signup verification","HANDING INFO TO OTP");
+                    finish();
+                });
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() ->

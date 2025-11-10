@@ -5,6 +5,15 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+val localProps = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists() && localPropertiesFile.canRead()) {
+    localProps.load(localPropertiesFile.inputStream())
+    println("Local Property file found")
+} else {
+    println("Error finding")
+}
+
 android {
     namespace = "com.example.showdown"
     compileSdk = 36
@@ -21,15 +30,17 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         //MAIL_ADDRESS and MAIL_APP_PASSWORD are saved in local.properties for security
-        val localProperties = Properties()
-        val localPropertiesFile = rootProject.file("local.properties")
-        if (localPropertiesFile.exists()) {
-            localProperties.load(FileInputStream(localPropertiesFile))
-        }
-        val mailAddress = localProperties.getProperty("MAIL_ADDRESS") ?: ""
-        val mailPassword = localProperties.getProperty("MAIL_APP_PASSWORD") ?: ""
-        buildConfigField("String", "MAIL_ADDRESS", "\"$mailAddress\"")
-        buildConfigField("String", "MAIL_APP_PASSWORD", "\"$mailPassword\"")
+//        val localProperties = Properties()
+//        val localPropertiesFile = rootProject.file("local.properties")
+//        if (localPropertiesFile.exists()) {
+//            localProperties.load(FileInputStream(localPropertiesFile))
+//        }
+        val mailAddress = localProps.getProperty("EMAIL_ADDRESS") ?: ""
+        val mailPassword = localProps.getProperty("EMAIL_APP_PASSWORD") ?: ""
+        buildConfigField("String", "EMAIL_ADDRESS", "\"${mailAddress}\"")
+        buildConfigField("String", "EMAIL_APP_PASSWORD", "\"${mailPassword}\"")
+//        buildConfigField("String", "MAIL_ADDRESS", "\"${localProps["MAIL_ADDRESS"]}\"")
+//        buildConfigField("String", "MAIL_APP_PASSWORD", "\"${localProps["MAIL_APP_PASSWORD"]}\"")
     }
 
     packaging {
@@ -50,6 +61,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        buildFeatures {
+            buildConfig = true 
         }
     }
     compileOptions {
@@ -85,3 +100,8 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
+
+println("Loaded MAIL_ADDRESS = ${localProps.getProperty("sdk.dir")}")
+println("Loaded MAIL_ADDRESS = ${localProps.getProperty("TEST")}")
+println("Loaded MAIL_ADDRESS = ${localProps.getProperty("EMAIL_ADDRESS")}")
+println("Loaded MAIL_APP_PASSWORD = ${localProps.getProperty("EMAIL_APP_PASSWORD")}")

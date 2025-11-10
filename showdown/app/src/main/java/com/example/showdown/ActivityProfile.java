@@ -116,18 +116,15 @@ public class ActivityProfile extends AppCompatActivity {
 
         switch (currentTab) {
             case POSTS:
-                btnPosts.setBackgroundColor(ContextCompat.getColor(this,R.color.primary_light));
-                btnPosts.setTextColor(ContextCompat.getColor(this,R.color.black));
+                btnPosts.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_dark));
                 cvAddEvent.setVisibility(View.VISIBLE);
                 break;
             case HISTORY:
-                btnHistory.setBackgroundColor(ContextCompat.getColor(this,R.color.primary_light));
-                btnHistory.setTextColor(ContextCompat.getColor(this,R.color.black));
+                btnHistory.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_dark));
                 cvAddEvent.setVisibility(View.GONE);
                 break;
             case BOOKINGS:
-                btnBookings.setBackgroundColor(ContextCompat.getColor(this,R.color.primary_light));
-                btnBookings.setTextColor(ContextCompat.getColor(this,R.color.black));
+                btnBookings.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_dark));
                 cvAddEvent.setVisibility(View.GONE);
                 break;
         }
@@ -135,6 +132,7 @@ public class ActivityProfile extends AppCompatActivity {
 
     private void switchTab(TabType tab) {
         currentTab = tab;
+        updateTabs();
         filterAndDisplayEvents();
     }
 
@@ -142,7 +140,6 @@ public class ActivityProfile extends AppCompatActivity {
         btnPosts.setOnClickListener(v -> switchTab(TabType.POSTS));
         btnHistory.setOnClickListener(v -> switchTab(TabType.HISTORY));
         btnBookings.setOnClickListener(v -> switchTab(TabType.BOOKINGS));
-        updateTabs();
     }
 
     private void setupAddEventCard() {
@@ -224,6 +221,7 @@ public class ActivityProfile extends AppCompatActivity {
                 }
                 break;
             case HISTORY:
+
                 for (EventWithDetails event: userEventDetails) { // Get Events from the past
                     if (event.event.endDate < currentTime) {
                         filteredEvents.add(event);

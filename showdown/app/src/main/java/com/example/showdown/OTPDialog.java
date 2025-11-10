@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
+
 import java.util.Random;
 import java.util.Properties;
 import javax.mail.Authenticator;
@@ -61,8 +63,9 @@ public class OTPDialog {
     public static void sendOTPEmail(final String recipient, final String otp) {
         new Thread(() -> {
            try {
-               String senderEmail = BuildConfig.MAIL_ADDRESS;
-               String senderPassword = BuildConfig.MAIL_APP_PASSWORD;
+               Log.i("Send OTP","Generating Email");
+               String senderEmail = BuildConfig.EMAIL_ADDRESS;
+               String senderPassword = BuildConfig.EMAIL_APP_PASSWORD;
 
                Properties props = new Properties();
                props.put("mail.smtp.auth","true");
@@ -78,9 +81,13 @@ public class OTPDialog {
                    }
                });
 
+               String cleanRecipient = recipient
+                       .replaceAll("\\s", "")                // removes ALL whitespace (space/tab/newline)
+                       .replace("\u200B", "");               // removes zero-width space (common issue)
+
                Message message = new MimeMessage(session);
                message.setFrom(new InternetAddress(senderEmail));
-               message.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
+               message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(cleanRecipient, true));
                message.setSubject("Showdown - Email Verification OTP");
 
                 String emailBody = "<!DOCTYPE html>"+
@@ -95,9 +102,17 @@ public class OTPDialog {
 
                 message.setContent(emailBody, "text/html");
                 Transport.send(message);
+               Log.i("Send OTP","Sending Email");
 
            }catch (MessagingException e) {
                e.printStackTrace();
+               Log.e("Send OTP","Email was not able to send " + e.getMessage());
+               Log.d("Email Debug", "Sender email: [" + BuildConfig.EMAIL_ADDRESS + "]");
+               Log.d("Email Debug", "Recipient email: [" + recipient + "]");
+               Log.d("Email Debug", "Recipient length = " + recipient.length());
+               for (int i = 0; i < recipient.length(); i++) {
+                   Log.d("Email Debug", "Char[" + i + "] = " + (int) recipient.charAt(i));
+               }
            }
         }).start();
     }

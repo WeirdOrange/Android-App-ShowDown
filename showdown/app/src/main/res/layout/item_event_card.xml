@@ -62,6 +62,7 @@
                     android:textSize="24sp"
                     android:fontFamily="@font/roboto_condensed_extrabolditalic"
                     android:textColor="@android:color/black"
+                    android:visibility="gone"
                     />
                 <TextView
                     android:id="@+id/tv_event_time"
@@ -74,6 +75,7 @@
                     android:textSize="16sp"
                     android:fontFamily="@font/roboto_condensed_extrabolditalic"
                     android:textColor="@android:color/black"
+                    android:visibility="gone"
                     />
                 </LinearLayout>
 
@@ -128,14 +130,15 @@
                     />
 
                 <Button
-                    android:id="@+id/btn_book_ticket"
+                    android:id="@+id/btn_know_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Book"
+                    android:text="Know More"
                     android:textSize="12sp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:backgroundTint="@color/secondary_dark"
+                    android:visibility="visible"
                     />
             </LinearLayout>
         </LinearLayout>

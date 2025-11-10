@@ -54,6 +54,7 @@ public class ActivityCalendar extends AppCompatActivity {
     private SimpleDateFormat displayDateFormat;
     private DateTimeFormatter calendarDateFormat;
     private ActivityNavigation navHelper;
+    private EventRecyclerView mEventRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +98,7 @@ public class ActivityCalendar extends AppCompatActivity {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
         // Configure bottom sheet
-        bottomSheetBehavior.setPeekHeight(200);
+        bottomSheetBehavior.setPeekHeight(400);
         bottomSheetBehavior.setHideable(false);
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
@@ -163,48 +164,34 @@ public class ActivityCalendar extends AppCompatActivity {
         executorService.execute(() -> {
             try {
                 // Get event ticket for that day
-                List<DBEventTickets> tickets = db.eventTicketDao().getTicketsByDate(selectedDate);
+                List<DBEvent> events = db.eventsDao().getEventsByDate(selectedDate);
                 List<EventWithDetails> eventDetailsList = new ArrayList<>();
 
-                if (!tickets.isEmpty()) {
-                    for (DBEventTickets ticket : tickets) {
-                        // Get events for the selected date
-                        List<DBEvent> events = db.eventsDao().getEventsByDate(selectedDate);
-                        for (DBEvent event : events) {
-                            if (event.id == ticket.eventsID) {
-                                EventWithDetails details = new EventWithDetails();
-                                details.event = event;
+                for (DBEvent event : events) {
+                    EventWithDetails details = new EventWithDetails();
+                    details.event = event;
 
-                                // Get user information
-                                List<DBUser> users = db.userDao().getAllBlocking();
-                                for (DBUser user : users) {
-                                    if (user.id == event.userId) {
-                                        details.user = user;
-                                        break;
-                                    }
-                                }
-
-                                details.datetime = ticket.ticketDateTime;
-
-                                // Calculate available tickets
-                                Integer totalTickets = db.eventTicketDao().getTotalAvailableTickets(event.id);
-                                int bookedTickets = db.bookedTicketDao().getBookedCountByEvent(event.id);
-
-                                if (totalTickets != null) {
-                                    details.availableTickets = totalTickets - bookedTickets;
-                                } else {
-                                    details.availableTickets = 0;
-                                }
-
-                                eventDetailsList.add(details);
-                                Log.d("Event Cards", "booking added");
-                            } else {
-                                Log.d("Event Cards", "this event does not have bookings available today");
-                            }
+                    // Get user information
+                    List<DBUser> users = db.userDao().getAllBlocking();
+                    for (DBUser user : users) {
+                        if (user.id == event.userId) {
+                            details.user = user;
+                            break;
                         }
                     }
-                } else {
-                    Log.d("Event Cards", "No events happening today");
+
+                    // Calculate available tickets
+                    Integer totalTickets = db.eventTicketDao().getTotalAvailableTickets(event.id);
+                    int bookedTickets = db.bookedTicketDao().getBookedCountByEvent(event.id);
+
+                    if (totalTickets != null) {
+                        details.availableTickets = totalTickets - bookedTickets;
+                    } else {
+                        details.availableTickets = 0;
+                    }
+
+                    eventDetailsList.add(details);
+                    Log.d("Event Cards", "booking added");
                 }
 
                 // Update UI on main thread
