@@ -141,18 +141,22 @@ public class ActivityMain extends AppCompatActivity {
 
     private void setupBottomSheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        bottomSheetBehavior.setPeekHeight(0);
+        bottomSheetBehavior.setPeekHeight(400);
+        bottomSheetBehavior.setHideable(false);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
         btnCloseSheet.setOnClickListener(v ->
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+                bottomSheet.setVisibility(View.GONE)
         );
 
         btnInfo.setOnClickListener(v -> {
-            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            Log.i("Bottomsheet","Btn info clicked");
+            if (bottomSheet.getVisibility() == View.GONE) {
+                Log.i("Bottomsheet","Btn info opening");
+                bottomSheet.setVisibility(View.VISIBLE);
             } else {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                Log.i("Bottomsheet","Btn info closing");
+                bottomSheet.setVisibility(View.GONE);
             }
         });
     }

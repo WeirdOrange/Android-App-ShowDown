@@ -31,3 +31,4 @@ public interface DAOUser {
     @Query("SELECT COUNT(*) FROM users WHERE email = :email")
     int checkEmailExists(String email);
 }
+

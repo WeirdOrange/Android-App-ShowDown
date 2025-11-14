@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@color/white">
+    style="@style/BackgroundWhite">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,7 +14,6 @@
         android:text="Add Ticket Slot"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
         android:layout_marginBottom="16dp"/>
 
     <TextView
@@ -69,8 +68,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter ticket amount (e.g., 50)"
+        android:textColorHint="@color/gray"
+        android:textColor="@color/black"
         android:fontFamily="@font/nats_regular"
         android:inputType="number"
+        android:textSize="16sp"
         android:padding="12dp"
         android:background="@drawable/edittext_border"
         android:layout_marginTop="4dp"/>

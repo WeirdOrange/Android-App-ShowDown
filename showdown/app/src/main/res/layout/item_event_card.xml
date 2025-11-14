@@ -24,7 +24,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/gradient_fade_mask" />
+            style="@style/CardMask"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,7 +47,7 @@
                     android:textStyle="bold"
                     android:layout_weight="1"
                     android:fontFamily="@font/nats_regular"
-                    android:textColor="@android:color/black" />
+                    />
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -74,7 +75,6 @@
                     android:text="15:00"
                     android:textSize="16sp"
                     android:fontFamily="@font/roboto_condensed_extrabolditalic"
-                    android:textColor="@android:color/black"
                     android:visibility="gone"
                     />
                 </LinearLayout>
@@ -86,7 +86,6 @@
                 android:layout_height="wrap_content"
                 android:text="Event description goes here"
                 android:textSize="16sp"
-                android:textColor="@android:color/tertiary_text_dark"
                 android:fontFamily="@font/nats_regular"
                 android:maxLines="1"
                 android:ellipsize="end" />
@@ -103,12 +102,12 @@
                     android:layout_height="wrap_content"
                     android:text="Location"
                     android:textSize="16sp"
-                    android:textColor="@android:color/tertiary_text_dark"
                     android:fontFamily="@font/nats_regular"
                     android:paddingTop="5dp"
                     android:drawableStart="@android:drawable/ic_dialog_map"
                     android:drawablePadding="4dp"
-                    android:drawableTint="@color/black"/>
+                    style="@style/TintBackground"
+                    />
             </LinearLayout>
 
             <LinearLayout
@@ -137,8 +136,8 @@
                     android:textSize="12sp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:backgroundTint="@color/secondary_dark"
                     android:visibility="visible"
+                    style="@style/TabBttnBackground"
                     />
             </LinearLayout>
         </LinearLayout>

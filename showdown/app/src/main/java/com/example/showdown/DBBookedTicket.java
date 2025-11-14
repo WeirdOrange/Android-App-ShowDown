@@ -25,6 +25,7 @@ import androidx.room.PrimaryKey;
         @Index("userId")
     }
 )
+
 public class DBBookedTicket {
     @PrimaryKey(autoGenerate = true)
     public int id;

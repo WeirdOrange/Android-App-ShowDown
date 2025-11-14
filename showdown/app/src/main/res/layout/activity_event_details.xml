@@ -3,18 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    style="@style/BackgroundLight"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Header with back button -->
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/secondary_light">
+            style="@style/BackgroundContent"
+            >
 
             <ImageButton
                 android:id="@+id/btn_back"
@@ -165,6 +166,20 @@
                         android:textColor="@color/white"
                         android:gravity="center"/>
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_edit_event"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:backgroundTint="@color/primary_light"
+                    android:fontFamily="@font/nats_regular"
+                    android:text="Edit Event"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -278,14 +293,12 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Bookings Section -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Bookings"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/black"
             android:fontFamily="@font/nats_regular"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"

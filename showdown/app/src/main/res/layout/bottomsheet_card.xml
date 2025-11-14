@@ -14,8 +14,9 @@
         android:background="@drawable/edittext_border"
         android:clickable="false"
         android:focusable="false"
+        android:visibility="gone"
         android:padding="24dp"
-        app:behavior_peekHeight="0dp"
+        app:behavior_peekHeight="300dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <View

@@ -1,6 +1,7 @@
 package com.example.showdown;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import com.example.showdown.DBEventTickets;
@@ -11,6 +12,9 @@ import java.util.List;
 public interface DAOEventTickets {
     @Insert
     long insert(DBEventTickets tickets);
+
+    @Delete
+    void delete(DBEventTickets tickets);
 
     @Query("SELECT * FROM tickets")
     List<DBEventTickets> getAllBlocking();
@@ -26,3 +30,4 @@ public interface DAOEventTickets {
     @Query("SELECT SUM(availableTickets) FROM tickets WHERE eventsID = :eventId")
     Integer getTotalAvailableTickets(int eventId);
 }
+

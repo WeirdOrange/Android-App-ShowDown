@@ -10,7 +10,7 @@
     android:focusable="true"
     app:cardCornerRadius="12dp"
     app:cardElevation="4dp"
-    android:background="@color/white"
+    style="@style/BackgroundWhite"
     app:strokeWidth="5dp"
     app:strokeColor="@color/red"
     >
@@ -43,7 +43,7 @@
                 android:layout_marginTop="-20dp"
                 android:text="Available Ticket"
                 android:textSize="16sp"
-                android:textColor="@color/dark_gray"
+                style="@style/GrayText"
                 />
         </LinearLayout>
         <TextView

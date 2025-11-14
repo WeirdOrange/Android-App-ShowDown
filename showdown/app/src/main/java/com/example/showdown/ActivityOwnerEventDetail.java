@@ -1,11 +1,13 @@
 package com.example.showdown;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ActivityOwnerEventDetail extends AppCompatActivity {
+    private Button btnEditEvent;
     private ImageButton btnBack;
     private ImageView ivEventImage;
     private TextView tvEventTitle, tvEventDescription, tvEventLocation;
@@ -78,8 +81,14 @@ public class ActivityOwnerEventDetail extends AppCompatActivity {
         tvAvailableTickets = findViewById(R.id.tv_available_tickets);
         rvBookings = findViewById(R.id.rv_bookings);
         tvNoBookings = findViewById(R.id.tv_no_bookings);
+        btnEditEvent = findViewById(R.id.btn_edit_event);
 
         btnBack.setOnClickListener(v -> finish());
+        btnEditEvent.setOnClickListener(v -> {
+            Intent intent = new Intent(ActivityOwnerEventDetail.this, ActivityEditEvent.class);
+            intent.putExtra("Event_ID", eventId);
+            startActivity(intent);
+        });
     }
 
     private void setupRecyclerView() {

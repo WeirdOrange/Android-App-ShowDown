@@ -2,7 +2,68 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.Showdown" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->-->
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Background">
+        <item name="android:background">#E3E1FF</item>
+    </style>
+    <style name="Background2">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_gradient2</item>
+    </style>
+    <style name="Background3">
+        <item name="android:background">@color/secondary_light</item>
+    </style>
+    <style name="BackgroundLogin">
+        <item name="android:background">@color/secondary_light</item>
+    </style>
+    <style name="BackgroundLight">
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="BackgroundWhite">
+        <item name="android:background">@color/white</item>
+    </style>
+    <style name="BackgroundContent">
+        <item name="android:background">@color/secondary_light</item>
+    </style>
+    <style name="Background_Circle">
+        <item name="android:background">@drawable/circle</item>
+    </style>
+    <style name="login_Circle">
+        <item name="android:background">@drawable/circle</item>
+    </style>
+    <style name="Circle">
+        <item name="android:background">@drawable/circle_dark</item>
+    </style>
+    <style name="profile">
+        <item name="android:src">@drawable/account_circle</item>
+    </style>
+    <style name="scrollview">
+        <item name="android:background">@drawable/edittext_border</item>
+    </style>
+    <style name="CardMask">
+        <item name="android:background">@drawable/gradient_fade_mask</item>
+    </style>
+    <style name="TabBackground">
+        <item name="android:background">@color/secondary_light</item>
+    </style>
+    <style name="TabBttnBackground">
+        <item name="android:backgroundTint">@color/secondary_light</item>
+    </style>
+    <style name="NavBttn">
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
+    <style name="CloseBttn">
+        <item name="android:backgroundTint">@color/red</item>
+    </style>
+    <style name="TintBackground">
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+    <style name="GrayText">
+        <item name="android:textColor">@color/dark_gray</item>
     </style>
 
     <style name="CalendarDate">

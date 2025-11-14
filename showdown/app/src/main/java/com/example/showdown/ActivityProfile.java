@@ -1,5 +1,6 @@
 package com.example.showdown;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -31,9 +33,8 @@ public class ActivityProfile extends AppCompatActivity {
     private RecyclerView rvUserPosts;
     private ProfilePostsAdapter postsAdapter;
     private Button navigation_bttn, btnPosts, btnHistory, btnBookings;
-    private FrameLayout profile2;
     private TextView userID, username;
-    private ImageView profile1;
+    private ImageView profile1, profile2;
 
     private AppDatabase db;
     private ExecutorService executorService;
@@ -96,8 +97,20 @@ public class ActivityProfile extends AppCompatActivity {
         rvUserPosts = findViewById(R.id.rv_user_posts);
 
         postsAdapter = new ProfilePostsAdapter(event -> {
-            Intent intent = new Intent(this, ActivityMain.class);
-            intent.putExtra("Event_ID", event.event.id);
+            Intent intent;
+
+            // Check which tab is active
+            if (currentTab == TabType.BOOKINGS) {
+                // For bookings, go to MyBooking activity
+                intent = new Intent(this, ActivityMyBooking.class);
+                intent.putExtra("Event_ID", event.event.id);
+                intent.putExtra("User_ID", currentUserId);
+            } else {
+                // For posts/history, go to EventDetails activity
+                intent = new Intent(this, ActivityOwnerEventDetail.class);
+                intent.putExtra("Event_ID", event.event.id);
+            }
+
             startActivity(intent);
         });
 
@@ -107,24 +120,21 @@ public class ActivityProfile extends AppCompatActivity {
 
     private void updateTabs() {
         // Reset Tabs
-        btnPosts.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_light));
-        btnHistory.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_light));
-        btnBookings.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_light));
         btnPosts.setTextColor(ContextCompat.getColor(this,R.color.white));
         btnHistory.setTextColor(ContextCompat.getColor(this,R.color.white));
         btnBookings.setTextColor(ContextCompat.getColor(this,R.color.white));
 
         switch (currentTab) {
             case POSTS:
-                btnPosts.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_dark));
+                btnPosts.setTextColor(ContextCompat.getColor(this,R.color.secondary_dark_blue));
                 cvAddEvent.setVisibility(View.VISIBLE);
                 break;
             case HISTORY:
-                btnHistory.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_dark));
+                btnHistory.setTextColor(ContextCompat.getColor(this,R.color.secondary_dark_blue));
                 cvAddEvent.setVisibility(View.GONE);
                 break;
             case BOOKINGS:
-                btnBookings.setBackgroundColor(ContextCompat.getColor(this,R.color.secondary_dark));
+                btnBookings.setTextColor(ContextCompat.getColor(this,R.color.secondary_dark_blue));
                 cvAddEvent.setVisibility(View.GONE);
                 break;
         }
@@ -175,6 +185,16 @@ public class ActivityProfile extends AppCompatActivity {
                         // Set User Name and id
                         username.setText(user.name);
                         userID.setText("ID: " + user.id);
+
+                        if (user.profile != null) {
+                            Bitmap bmp = BitmapFactory.decodeByteArray(user.profile, 0, user.profile.length);
+                            profile1.setImageBitmap(bmp);
+                        }
+
+                        if (user.backgroundProfile != null) {
+                            Bitmap bmp = BitmapFactory.decodeByteArray(user.backgroundProfile, 0, user.backgroundProfile.length);
+                            profile2.setImageBitmap(bmp);
+                        }
                     });
                 }
 
@@ -216,14 +236,15 @@ public class ActivityProfile extends AppCompatActivity {
             case POSTS:
                 for (EventWithDetails event: userEventDetails) {
                     if (event.event.endDate >= currentTime) { // Get Events that are available
+                        Log.i("Posted Event","I AM TRYING SO HARD RN");
                         filteredEvents.add(event);
                     }
                 }
                 break;
             case HISTORY:
-
                 for (EventWithDetails event: userEventDetails) { // Get Events from the past
                     if (event.event.endDate < currentTime) {
+                        Log.i("Event History","I AM TRYING SO HARD RN");
                         filteredEvents.add(event);
                     }
                 }
@@ -286,7 +307,6 @@ public class ActivityProfile extends AppCompatActivity {
                                 details.availableTickets = -1;
 
                                 bookedEvents.add(details);
-                                // todo: check if it will show if available ticket is -1
                             }
                         }
                     }

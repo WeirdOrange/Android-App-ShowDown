@@ -10,6 +10,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import com.example.showdown.DBBookedTicket;
@@ -23,6 +24,9 @@ import java.util.concurrent.Executors;
 public interface DAOBookedTicket {
     @Insert
     void insert(DBBookedTicket bookedTicket);
+
+    @Delete
+    void delete(DBBookedTicket bookedTicket);
 
     @Query("SELECT * FROM bookedtickets")
     List<DBBookedTicket> getAllBlocking();

@@ -36,6 +36,12 @@
             android:name=".ActivityOwnerEventDetail"
             android:exported="false" />
         <activity
+            android:name=".ActivityEditEvent"
+            android:exported="false" />
+        <activity
+            android:name=".ActivityMyBooking"
+            android:exported="false" />
+        <activity
             android:name=".ActivityOTPVerification"
             android:exported="false" />
         <activity

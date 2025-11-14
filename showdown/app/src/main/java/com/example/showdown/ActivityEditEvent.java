@@ -2,7 +2,6 @@ package com.example.showdown;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -26,14 +25,15 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ActivityAddEvent extends AppCompatActivity {
+public class ActivityEditEvent extends AppCompatActivity {
     private EditText etTitle, etDescription, etLocation;
-    private Button btnSelectStartDate, btnSelectEndDate, btnPublish;
-    private ImageButton ivEventImage, btnCancel,cvAddTicket;
+    private Button btnSelectStartDate, btnSelectEndDate, btnSaveChanges;
+    private ImageButton ivEventImage, btnCancel, cvAddTicket;
     private ArrayList<AddTicket.TicketInfo> ticketSlots;
     private RecyclerView rvTicketList;
     private TextView tvTicketCount;
@@ -42,15 +42,15 @@ public class ActivityAddEvent extends AppCompatActivity {
 
     private AppDatabase db;
     private ExecutorService executorService;
-    private SharedPreferences sharedPreferences;
     private SimpleDateFormat dateFormat;
 
     private long startDateTimestamp = 0;
     private long endDateTimestamp = 0;
-    private int currentUserId = -1;
+    private int eventId = -1;
+    private DBEvent currentEvent;
     private byte[] selectedImageBytes = null;
+    private boolean imageChanged = false;
 
-    // Image picker launcher
     private final ActivityResultLauncher<Intent> imagePickerLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
@@ -61,43 +61,43 @@ public class ActivityAddEvent extends AppCompatActivity {
                 }
             });
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_event);
+        setContentView(R.layout.activity_edit_event);
 
         db = AppDatabase.getInstance(this);
         executorService = Executors.newSingleThreadExecutor();
-        sharedPreferences = getSharedPreferences("ShowdownPrefs", MODE_PRIVATE);
+        dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        ticketSlots = new ArrayList<>();
 
-        currentUserId = sharedPreferences.getInt("userId", -1);
-        if (currentUserId == -1) {
-            Toast.makeText(this, "Please login first", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, ActivityLogin.class);
-            startActivity(intent);
+        // Get event ID from intent
+        Intent intent = getIntent();
+        if (intent.hasExtra("Event_ID")) {
+            eventId = intent.getIntExtra("Event_ID", -1);
+        }
+
+        if (eventId == -1) {
+            Toast.makeText(this, "Invalid event", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        dateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-        ticketSlots = new ArrayList<>();
-
         initializeViews();
         setupTicketRecyclerView();
         setupClickListeners();
-
+        loadEventData();
     }
 
     private void initializeViews() {
         etTitle = findViewById(R.id.et_event_title);
         etDescription = findViewById(R.id.et_event_description);
-        etLocation  = findViewById(R.id.et_event_location);
+        etLocation = findViewById(R.id.et_event_location);
         btnSelectStartDate = findViewById(R.id.btn_select_start_date);
         btnSelectEndDate = findViewById(R.id.btn_select_end_date);
-        btnPublish = findViewById(R.id.btn_publish_event);
+        btnSaveChanges = findViewById(R.id.btn_save_changes);
         btnCancel = findViewById(R.id.btn_cancel);
-        ivEventImage = findViewById(R.id.cardImage2);
+        ivEventImage = findViewById(R.id.cardImage);
         cvAddTicket = findViewById(R.id.cv_add_ticket);
         rvTicketList = findViewById(R.id.rv_ticket_list);
         tvTicketCount = findViewById(R.id.tv_ticket_count);
@@ -108,13 +108,79 @@ public class ActivityAddEvent extends AppCompatActivity {
             ticketSlots.remove(position);
             ticketAdapter.removeTicket(position);
             updateTicketCount();
-            Toast.makeText(this,"Ticket Slot Removed",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ticket Slot Removed", Toast.LENGTH_SHORT).show();
         });
 
         rvTicketList.setLayoutManager(new LinearLayoutManager(this));
         rvTicketList.setAdapter(ticketAdapter);
         updateTicketCount();
+    }
+
+    private void loadEventData() {
+        executorService.execute(() -> {
+            try {
+                // Get event
+                List<DBEvent> events = db.eventsDao().getAllBlocking();
+                for (DBEvent event : events) {
+                    if (event.id == eventId) {
+                        currentEvent = event;
+                        break;
+                    }
+                }
+
+                if (currentEvent == null) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, "Event not found", Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                    return;
+                }
+
+                // Get existing tickets
+                List<DBEventTickets> existingTickets = db.eventTicketDao().getTicketsByEventId(eventId);
+
+                for (DBEventTickets ticket : existingTickets) {
+                    AddTicket.TicketInfo ticketInfo = new AddTicket.TicketInfo(
+                            ticket.ticketDateTime,
+                            ticket.availableTickets,
+                            dateFormat.format(ticket.ticketDateTime),
+                            new SimpleDateFormat("HH:mm", Locale.getDefault()).format(ticket.ticketDateTime)
+                    );
+                    ticketSlots.add(ticketInfo);
+                }
+
+                runOnUiThread(() -> {
+                    // Populate fields
+                    etTitle.setText(currentEvent.title);
+                    etDescription.setText(currentEvent.description);
+                    etLocation.setText(currentEvent.location);
+
+                    startDateTimestamp = currentEvent.startDate;
+                    endDateTimestamp = currentEvent.endDate;
+
+                    btnSelectStartDate.setText("Start: " + dateFormat.format(currentEvent.startDate));
+                    btnSelectEndDate.setText("End: " + dateFormat.format(currentEvent.endDate));
+
+                    if (currentEvent.image != null) {
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(
+                                currentEvent.image, 0, currentEvent.image.length);
+                        ivEventImage.setImageBitmap(bitmap);
+                        selectedImageBytes = currentEvent.image;
+                    }
+
+                    // Update ticket list
+                    ticketAdapter.setTickets(ticketSlots);
+                    updateTicketCount();
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Error loading event: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
     }
 
     private void showAddTicketDialog() {
@@ -127,7 +193,7 @@ public class ActivityAddEvent extends AppCompatActivity {
 
     private void updateTicketCount() {
         int totalTickets = 0;
-        for (AddTicket.TicketInfo ticket: ticketSlots) {
+        for (AddTicket.TicketInfo ticket : ticketSlots) {
             totalTickets += ticket.availableTickets;
         }
 
@@ -175,12 +241,12 @@ public class ActivityAddEvent extends AppCompatActivity {
             Bitmap resizedBitmap = resizeBitmap(bitmap, 800, 800);
             ivEventImage.setImageBitmap(resizedBitmap);
 
-            // Byte Converter
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
             selectedImageBytes = stream.toByteArray();
+            imageChanged = true;
 
-            Toast.makeText(this, "Image selected!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Image updated!", Toast.LENGTH_SHORT).show();
 
             if (inputStream != null) {
                 inputStream.close();
@@ -192,7 +258,7 @@ public class ActivityAddEvent extends AppCompatActivity {
         }
     }
 
-    private void showDatePicker (boolean isStartDate) {
+    private void showDatePicker(boolean isStartDate) {
         Calendar calendar = Calendar.getInstance();
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
@@ -220,7 +286,7 @@ public class ActivityAddEvent extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    private void publishEvent() {
+    private void saveChanges() {
         String title = etTitle.getText().toString().trim();
         String description = etDescription.getText().toString().trim();
         String location = etLocation.getText().toString().trim();
@@ -264,34 +330,37 @@ public class ActivityAddEvent extends AppCompatActivity {
 
         executorService.execute(() -> {
             try {
-                DBEvent event = new DBEvent();
-                event.title = title;
-                event.description = description;
-                event.location = location;
-                event.startDate = startDateTimestamp;
-                event.endDate = endDateTimestamp;
-                event.publishedDate = System.currentTimeMillis();
-                event.userId = currentUserId;
-                event.image = selectedImageBytes;
-                event.active = true;
+                // Update event details
+                currentEvent.title = title;
+                currentEvent.description = description;
+                currentEvent.location = location;
+                currentEvent.startDate = startDateTimestamp;
+                currentEvent.endDate = endDateTimestamp;
+                currentEvent.image = selectedImageBytes;
 
-                long eventId = db.eventsDao().insert(event);
+                db.eventsDao().update(currentEvent);
 
-                // Create All Ticket Slots
-                for (AddTicket.TicketInfo ticketInfo: ticketSlots) {
+                // Delete old tickets
+                List<DBEventTickets> oldTickets = db.eventTicketDao().getTicketsByEventId(eventId);
+                for (DBEventTickets oldTicket : oldTickets) {
+                    db.eventTicketDao().delete(oldTicket);
+                }
+
+                // Create new ticket slots
+                for (AddTicket.TicketInfo ticketInfo : ticketSlots) {
                     DBEventTickets ticket = new DBEventTickets();
-                    ticket.name = event.title;
+                    ticket.name = currentEvent.title;
                     ticket.availableTickets = ticketInfo.availableTickets;
                     ticket.ticketDateTime = ticketInfo.dateTime;
                     ticket.dateCreated = System.currentTimeMillis();
-                    ticket.eventsID = (int) eventId;
+                    ticket.eventsID = eventId;
 
                     db.eventTicketDao().insert(ticket);
                 }
 
                 runOnUiThread(() -> {
-                    Toast.makeText(this, "Event Published Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(ActivityAddEvent.this, ActivityProfile.class);
+                    Toast.makeText(this, "Event Updated Successfully!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ActivityEditEvent.this, ActivityProfile.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     setResult(RESULT_OK);
@@ -300,7 +369,7 @@ public class ActivityAddEvent extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() ->
-                        Toast.makeText(this, "Error publishing event: " + e.getMessage(),
+                        Toast.makeText(this, "Error updating event: " + e.getMessage(),
                                 Toast.LENGTH_SHORT).show()
                 );
             }
@@ -311,7 +380,7 @@ public class ActivityAddEvent extends AppCompatActivity {
         btnSelectStartDate.setOnClickListener(v -> showDatePicker(true));
         btnSelectEndDate.setOnClickListener(v -> showDatePicker(false));
 
-        btnPublish.setOnClickListener(v -> publishEvent());
+        btnSaveChanges.setOnClickListener(v -> saveChanges());
         btnCancel.setOnClickListener(v -> finish());
 
         ivEventImage.setOnClickListener(v -> openImagePicker());
@@ -325,9 +394,5 @@ public class ActivityAddEvent extends AppCompatActivity {
         if (executorService != null && !executorService.isShutdown()) {
             executorService.shutdown();
         }
-//        if (searchEngine != null) {
-//            searchEngine.cancel();
-//        }
-//        MapboxSearchSdk.terminate();
     }
 }

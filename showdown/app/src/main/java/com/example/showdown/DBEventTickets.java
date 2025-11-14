@@ -1,5 +1,5 @@
 package com.example.showdown;
-import androidx.room.Dao;
+
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
             entity = DBEvent.class,           // ← Parent table
             parentColumns = "id",          // ← Parent PK
             childColumns = "eventsID",       // ← Child FK column
-            onDelete = ForeignKey.CASCADE  // ← Optional: delete events if user is deleted
+            onDelete = ForeignKey.RESTRICT
         ),
         indices = {@Index("eventsID")}
 )

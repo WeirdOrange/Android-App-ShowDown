@@ -90,9 +90,9 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
             holder.eventImage.setImageBitmap(bmp);
         }
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), ActivityOwnerEventDetail.class);
-            intent.putExtra("Event_ID", event.id);
-            v.getContext().startActivity(intent);
+            if (listener != null) {
+                listener.onBookClick(eventDetails);
+            }
         });
     }
 }

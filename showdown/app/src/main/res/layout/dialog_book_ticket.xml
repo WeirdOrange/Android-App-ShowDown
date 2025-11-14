@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="24dp"
-    android:background="@color/white">
+    style="@style/BackgroundWhite"
+    >
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,7 +14,6 @@
         android:text="Book Tickets"
         android:textSize="24sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
         android:fontFamily="@font/nats_regular"
         android:layout_marginBottom="8dp"/>
 
@@ -23,8 +23,8 @@
         android:layout_height="wrap_content"
         android:text="Event Title"
         android:textSize="18sp"
-        android:textColor="@color/secondary_dark"
-        android:fontFamily="@font/nats_regular"
+        android:fontFamily="@font/roboto_condensed_extrabolditalic"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"/>
 
     <TextView
@@ -33,7 +33,6 @@
         android:text="Select a ticket slot:"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
         android:layout_marginBottom="12dp"/>
 
     <ScrollView
@@ -72,6 +71,6 @@
         android:text="Close"
         android:textSize="16sp"
         android:fontFamily="@font/nats_regular"
-        android:backgroundTint="@android:color/darker_gray"/>
+        style="@style/CloseBttn"/>
 
 </LinearLayout>

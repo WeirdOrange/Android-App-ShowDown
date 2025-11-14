@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/bg_gradient2">
+    style="@style/Background2"
+    >
 
     <include layout="@layout/navbar" />
     <androidx.core.widget.NestedScrollView
@@ -19,16 +20,22 @@
             android:orientation="vertical">
 
             <FrameLayout
-                android:id="@+id/profile_pic2"
                 android:layout_width="match_parent"
                 android:layout_height="270dp"
                 android:gravity="center_horizontal"
-                android:background="@drawable/greatestshowmanposter"
                 >
+                <ImageView
+                    android:id="@+id/profile_pic2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/greatestshowmanposter"
+                    />
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/gradient_fade_mask3"/>
+                    style="@style/CardMask"
+                    />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -47,7 +54,6 @@
                         android:lineHeight="20sp"
                         android:layout_gravity="bottom"
                         android:fontFamily="@font/nats_regular"
-                        android:textColor="@android:color/black"
                         />
                     <TextView
                         android:id="@+id/user_id"
@@ -58,17 +64,32 @@
                         android:textStyle="bold"
                         android:lineHeight="20sp"
                         android:fontFamily="@font/nats_regular"
-                        android:textColor="@android:color/black"
                         />
                 </LinearLayout>
-                <ImageView
-                    android:id="@+id/profile_pic"
+                <androidx.cardview.widget.CardView
                     android:layout_width="160dp"
                     android:layout_height="160dp"
                     android:layout_marginEnd="20sp"
                     android:layout_marginTop="90sp"
                     android:layout_gravity="end"
-                    android:background="@drawable/circle_dark"/>
+                    android:elevation="12dp"
+                    app:cardCornerRadius="180dp"
+                    android:layout_centerHorizontal="true"
+                    app:cardBackgroundColor="@color/white"
+                    android:padding="5dp"
+                    android:innerRadius="0dp"
+                    android:shape="ring"
+                    android:thicknessRatio="1.9">
+                    <ImageButton
+                        android:id="@+id/profile_pic"
+                        android:layout_width="160dp"
+                        android:layout_height="160dp"
+                        android:src="@android:drawable/ic_menu_camera"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        style="@style/Circle"
+                        />
+                </androidx.cardview.widget.CardView>
             </FrameLayout>
 
             <LinearLayout
@@ -76,7 +97,7 @@
                 android:layout_height="40dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="10sp"
-                android:background="@color/secondary_light"
+                style="@style/TabBackground"
                 >
                 <Button
                     android:id="@+id/bttnPost"
@@ -84,7 +105,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
                     android:text="Posts"
-                    android:backgroundTint="@color/secondary_light"
+                    style="@style/TabBttnBackground"
                     />
                 <Button
                     android:id="@+id/bttnHistory"
@@ -93,7 +114,7 @@
                     android:textColor="@color/white"
                     android:textSize="16dp"
                     android:text="History"
-                    android:backgroundTint="@color/secondary_light"
+                    style="@style/TabBttnBackground"
                     />
                 <Button
                     android:id="@+id/bttnBookings"
@@ -102,10 +123,46 @@
                     android:textColor="@color/white"
                     android:textSize="16dp"
                     android:text="MyBookings"
-                    android:backgroundTint="@color/secondary_light"
+                    style="@style/TabBttnBackground"
                     />
             </LinearLayout>
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_add_event"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/gray"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                android:visibility="visible"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    >
+                    <ImageView
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@android:drawable/ic_input_add"
+                        app:tint="@color/white" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="New Event?"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -114,49 +171,15 @@
                 android:padding="10dp"
                 >
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_add_event"
-                    android:layout_width="160dp"
-                    android:layout_height="240dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp"
-                    app:cardBackgroundColor="@color/gray"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
-                    android:visibility="visible"
-                    >
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:padding="16dp"
-                        >
-                        <ImageView
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:src="@android:drawable/ic_input_add"
-                            app:tint="@color/white" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="New Event?"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:textColor="@color/white"
-                            android:layout_marginTop="16dp"/>
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_user_posts"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"/>
             </GridLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
 
     <Button
         android:id="@+id/toggle_nav_btn"
@@ -166,5 +189,6 @@
         android:layout_marginTop="50dp"
         android:layout_marginStart="20dp"
         android:background="@drawable/menu_icon"
+        style="@style/NavBttn"
         />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

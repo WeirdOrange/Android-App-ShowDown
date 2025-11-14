@@ -9,7 +9,7 @@ import androidx.room.Index;
                         entity = DBUser.class,           // ← Parent table
                         parentColumns = "id",          // ← Parent PK
                         childColumns = "userId",       // ← Child FK column
-                        onDelete = ForeignKey.CASCADE  // ← Optional: delete events if user is deleted
+                        onDelete = ForeignKey.CASCADE
                 ),
         indices = @Index("userId")
 )
