@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -222,7 +223,8 @@ public class ActivityMain extends AppCompatActivity {
     public void loadAllUpcomingEvents() {
         executorService.execute(() -> {
             try {
-                long todayTime = System.currentTimeMillis();
+                long oneDayInMillis = 24 * 60 * 60 * 1000;
+                long todayTime = System.currentTimeMillis() - oneDayInMillis;
                 List<DBEvent> upcomingEvents = db.eventsDao().getUpcomingEvents(todayTime);
 
                 if (!upcomingEvents.isEmpty()) {
@@ -255,7 +257,14 @@ public class ActivityMain extends AppCompatActivity {
                     allUpcomingEvents = eventDetailsList;
                     runOnUiThread(() ->{
                         carouselAdapter.setEvents(eventDetailsList);
-                        carouselAdapter.setActivePosition(0);
+
+                        Intent intent = getIntent();
+                        if (intent.hasExtra("Event_ID")) {
+                            currentEventId = intent.getIntExtra("Event_ID", -1);
+                            carouselAdapter.setActivePosition(currentEventId);
+                        } else {
+                            carouselAdapter.setActivePosition(0);
+                        }
 
                         if (!eventDetailsList.isEmpty()) {
                             displayEventDetails(eventDetailsList.get(0));
@@ -298,11 +307,83 @@ public class ActivityMain extends AppCompatActivity {
                 }
 
                 if (event != null) {
-                    loadAllUpcomingEvents();
+                    // Load all upcoming events
+                    long oneDayInMillis = 24 * 60 * 60 * 1000;
+                    long todayTime = System.currentTimeMillis() - oneDayInMillis;
+                    List<DBEvent> upcomingEvents = db.eventsDao().getUpcomingEvents(todayTime);
+
+                    if (!upcomingEvents.isEmpty()) {
+                        List<EventWithDetails> eventDetailsList = new ArrayList<>();
+                        int targetPosition = -1;
+
+                        for (int i = 0; i < upcomingEvents.size(); i++) {
+                            DBEvent currentEvent = upcomingEvents.get(i);
+                            EventWithDetails details = new EventWithDetails();
+                            details.event = currentEvent;
+
+                            if (currentEvent.id == eventId) {
+                                targetPosition = i;
+                            }
+
+                            List<DBUser> users = db.userDao().getAllBlocking();
+                            for (DBUser user : users) {
+                                if (user.id == currentEvent.userId) {
+                                    details.user = user;
+                                    break;
+                                }
+                            }
+
+                            Integer totalTickets = db.eventTicketDao().getTotalAvailableTickets(currentEvent.id);
+                            int bookedTickets = db.bookedTicketDao().getBookedCountByEvent(currentEvent.id);
+
+                            if (totalTickets != null) {
+                                details.availableTickets = totalTickets - bookedTickets;
+                            } else {
+                                details.availableTickets = 0;
+                            }
+
+                            eventDetailsList.add(details);
+                        }
+
+                        allUpcomingEvents = eventDetailsList;
+                        final int finalTargetPosition = targetPosition;
+
+                        runOnUiThread(() -> {
+                            carouselAdapter.setEvents(eventDetailsList);
+
+                            if (finalTargetPosition != -1) {
+                                // Scroll to the target event and set it as active
+                                rvEventCarousel.scrollToPosition(finalTargetPosition);
+                                carouselAdapter.setActivePosition(finalTargetPosition);
+                                displayEventDetails(eventDetailsList.get(finalTargetPosition));
+
+                                // Post a delayed scroll to ensure smooth centering
+                                rvEventCarousel.postDelayed(() -> {
+                                    rvEventCarousel.smoothScrollToPosition(finalTargetPosition);
+                                }, 100);
+                            } else if (!eventDetailsList.isEmpty()) {
+                                // If event not found in upcoming, fallback to first event
+                                carouselAdapter.setActivePosition(0);
+                                displayEventDetails(eventDetailsList.get(0));
+                            }
+                        });
+                    } else {
+                        runOnUiThread(() -> {
+                            tvEventTitle.setText("No Events Available");
+                            tvEventDescription.setText("Check back later for upcoming events!");
+                            tvEventLocation.setText("N/A");
+                            tvEventStartDate.setText("N/A");
+                            tvEventEndDate.setText("N/A");
+                            tvEventOrganizer.setText("N/A");
+                            tvEventContact.setText("N/A");
+                        });
+                    }
                 } else {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Event not found",
                                 Toast.LENGTH_SHORT).show();
+                        // Load all events
+                        loadAllUpcomingEvents();
                     });
                 }
             } catch (Exception e) {
