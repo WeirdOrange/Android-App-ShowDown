@@ -130,7 +130,7 @@
                 android:layout_marginTop="5sp"
                 android:importantForAutofill="no"
                 android:paddingStart="8sp"
-                android:hint="Enter Event Summary"
+                android:hint="Enter Event Location"
                 android:textColorHint="@color/gray"
                 android:fontFamily="@font/nats_regular"
                 android:textColor="@color/black"

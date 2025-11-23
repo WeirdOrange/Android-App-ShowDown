@@ -31,6 +31,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -163,13 +164,24 @@ public class ActivityCalendar extends AppCompatActivity {
     private void loadEventsFromDatabase(long selectedDate, String displayDate) {
         executorService.execute(() -> {
             try {
+                // filter date
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(selectedDate);
+                calendar.set(Calendar.HOUR_OF_DAY, 12);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MILLISECOND, 0);
+                long dayEnd = calendar.getTimeInMillis();
+
                 // Get event ticket for that day
-                List<DBEvent> events = db.eventsDao().getEventsByDate(selectedDate);
+                List<DBEvent> events = db.eventsDao().getEventsByDate(dayEnd);
                 List<EventWithDetails> eventDetailsList = new ArrayList<>();
+                Log.d("Calendar", "loadEventsFromDatabase: "+events);
 
                 for (DBEvent event : events) {
                     EventWithDetails details = new EventWithDetails();
                     details.event = event;
+                    Log.d("Calendar", "loadEventsFromDatabase: "+displayDateFormat.format(details.datetime));
 
                     // Get user information
                     List<DBUser> users = db.userDao().getAllBlocking();

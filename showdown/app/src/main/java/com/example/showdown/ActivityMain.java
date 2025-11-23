@@ -75,6 +75,7 @@ public class ActivityMain extends AppCompatActivity {
         });
 
         initializeViews();
+        loadUserData();
         setupBottomSheet();
         setupCarousel();
 
@@ -91,17 +92,17 @@ public class ActivityMain extends AppCompatActivity {
             if (currentEvent != null) {
                 // Open ticket booking dialog
                 BookTicketDialog dialog = new BookTicketDialog(
-                        ActivityMain.this,
-                        currentEvent,
-                        currentUserId,
-                        () -> {
-                            // Refresh event details after booking
-                            if (currentEventId != -1) {
-                                loadSpecifiedEvent(currentEventId);
-                            } else {
-                                loadAllUpcomingEvents();
-                            }
+                    ActivityMain.this,
+                    currentEvent,
+                    currentUserId,
+                    () -> {
+                        // Refresh event details after booking
+                        if (currentEventId != -1) {
+                            loadSpecifiedEvent(currentEventId);
+                        } else {
+                            loadAllUpcomingEvents();
                         }
+                    }
                 );
                 dialog.show();
             } else {
@@ -138,6 +139,28 @@ public class ActivityMain extends AppCompatActivity {
 
         bottomSheet = findViewById(R.id.bottom_sheet);
         btnCloseSheet = findViewById(R.id.btn_close_sheet);
+    }
+
+    private void loadUserData() {
+        executorService.execute(() -> {
+            try {
+                DBUser user = db.userDao().getUserById(currentUserId);
+                if (user != null) {
+                    runOnUiThread(() -> {
+                        if (user.profile != null) {
+                            Log.d("TAG", "loadUserData: "+user.profile.length);
+                            Bitmap bmp = BitmapFactory.decodeByteArray(user.profile, 0, user.profile.length);
+                            profile_bttn.setImageBitmap(bmp);
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                runOnUiThread(() -> Toast.makeText(this,
+                        "Error loading posts: " + e.getMessage(),
+                        Toast.LENGTH_SHORT).show());
+            }
+        });
     }
 
     private void setupBottomSheet() {

@@ -2,6 +2,7 @@ package com.example.showdown;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -70,7 +71,7 @@ public class BookTicketDialog {
                     int bookedCount = db.bookedTicketDao().getBookedCount(ticket.id);
                     int available = ticket.availableTickets - bookedCount;
 
-                    if (available > 0) {
+                    if (available >= 0) {
                         TicketSlotInfo slotInfo = new TicketSlotInfo();
                         slotInfo.ticket = ticket;
                         slotInfo.availableCount = available;

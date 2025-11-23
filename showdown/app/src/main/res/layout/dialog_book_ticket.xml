@@ -35,34 +35,27 @@
         android:textStyle="bold"
         android:layout_marginBottom="12dp"/>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_marginBottom="16dp">
-
-        <LinearLayout
+        android:layout_marginBottom="16dp"
+        android:fillViewport="true">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_available_tickets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:nestedScrollingEnabled="false"/>
+    </androidx.core.widget.NestedScrollView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_available_tickets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
-
-            <TextView
-                android:id="@+id/tv_no_tickets"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="No tickets available for this event"
-                android:textSize="16sp"
-                android:textColor="@color/gray"
-                android:gravity="center"
-                android:padding="32dp"
-                android:visibility="gone"/>
-        </LinearLayout>
-    </ScrollView>
+    <TextView
+        android:id="@+id/tv_no_tickets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No tickets available for this event"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/btn_close_dialog"

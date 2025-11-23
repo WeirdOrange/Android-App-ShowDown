@@ -60,15 +60,27 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
-                <ImageButton
-                    android:id="@+id/profile_bttn"
-                    style="@style/profile"
+
+                <androidx.cardview.widget.CardView
                     android:layout_width="40dp"
                     android:layout_height="45dp"
                     android:layout_gravity="end"
-                    android:background="@android:color/transparent"
-                    android:padding="0dp"
-                    android:text="@string/nav_profile" />
+                    android:elevation="12dp"
+                    app:cardCornerRadius="180dp"
+                    android:layout_centerHorizontal="true"
+                    app:cardBackgroundColor="@color/white"
+                    android:padding="5dp"
+                    android:innerRadius="0dp"
+                    android:shape="ring"
+                    android:thicknessRatio="1.9">
+                    <ImageButton
+                        android:id="@+id/profile_bttn"
+                        style="@style/profile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:text="@string/nav_profile" />
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
 
             <LinearLayout

@@ -264,12 +264,29 @@ public class ActivityAddEvent extends AppCompatActivity {
 
         executorService.execute(() -> {
             try {
+                // filter date
+                Calendar startDate = Calendar.getInstance();
+                startDate.setTimeInMillis(startDateTimestamp);
+                startDate.set(Calendar.HOUR_OF_DAY, 00);
+                startDate.set(Calendar.MINUTE, 0);
+                startDate.set(Calendar.SECOND, 0);
+                startDate.set(Calendar.MILLISECOND, 1);
+                long dayStart = startDate.getTimeInMillis();
+
+                Calendar endDate = Calendar.getInstance();
+                endDate.setTimeInMillis(endDateTimestamp);
+                endDate.set(Calendar.HOUR_OF_DAY, 23);
+                endDate.set(Calendar.MINUTE, 59);
+                endDate.set(Calendar.SECOND, 59);
+                endDate.set(Calendar.MILLISECOND, 99);
+                long dayEnd = endDate.getTimeInMillis();
+
                 DBEvent event = new DBEvent();
                 event.title = title;
                 event.description = description;
                 event.location = location;
-                event.startDate = startDateTimestamp;
-                event.endDate = endDateTimestamp;
+                event.startDate = dayStart;
+                event.endDate = dayEnd;
                 event.publishedDate = System.currentTimeMillis();
                 event.userId = currentUserId;
                 event.image = selectedImageBytes;

@@ -185,7 +185,6 @@ public class ActivityEditEvent extends AppCompatActivity {
 
     private void showAddTicketDialog() {
         new AddTicket(this, ticketInfo -> {
-            ticketSlots.add(ticketInfo);
             ticketAdapter.addTicket(ticketInfo);
             updateTicketCount();
         }).show();
@@ -330,12 +329,29 @@ public class ActivityEditEvent extends AppCompatActivity {
 
         executorService.execute(() -> {
             try {
+                // filter date
+                Calendar startDate = Calendar.getInstance();
+                startDate.setTimeInMillis(startDateTimestamp);
+                startDate.set(Calendar.HOUR_OF_DAY, 00);
+                startDate.set(Calendar.MINUTE, 0);
+                startDate.set(Calendar.SECOND, 0);
+                startDate.set(Calendar.MILLISECOND, 1);
+                long dayStart = startDate.getTimeInMillis();
+
+                Calendar endDate = Calendar.getInstance();
+                endDate.setTimeInMillis(endDateTimestamp);
+                endDate.set(Calendar.HOUR_OF_DAY, 23);
+                endDate.set(Calendar.MINUTE, 59);
+                endDate.set(Calendar.SECOND, 59);
+                endDate.set(Calendar.MILLISECOND, 99);
+                long dayEnd = endDate.getTimeInMillis();
+
                 // Update event details
                 currentEvent.title = title;
                 currentEvent.description = description;
                 currentEvent.location = location;
-                currentEvent.startDate = startDateTimestamp;
-                currentEvent.endDate = endDateTimestamp;
+                currentEvent.startDate = dayStart;
+                currentEvent.endDate = dayEnd;
                 currentEvent.image = selectedImageBytes;
 
                 db.eventsDao().update(currentEvent);

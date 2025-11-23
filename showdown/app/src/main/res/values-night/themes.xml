@@ -38,6 +38,7 @@
     </style>
     <style name="profile">
         <item name="android:src">@drawable/account_circle_light</item>
+        <item name="android:background">@drawable/circle_dark</item>
     </style>
     <style name="scrollview">
         <item name="android:background">@drawable/edittext_border_dark</item>
